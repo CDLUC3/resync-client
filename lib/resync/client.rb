@@ -1,4 +1,3 @@
-puts $LOAD_PATH
 require 'resync'
 
 # A Ruby client for the {http://www.openarchives.org/rs/1.0/resourcesync ResourceSync} web synchronization framework.
