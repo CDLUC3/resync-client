@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.authors = ['David Moles']
   spec.email = ['david.moles@ucop.edu']
   spec.summary = 'Client library for ResourceSync'
-  spec.description = 'A ResourceSync web synchronization framework client for Ruby'
+  spec.description = 'A Ruby client for the ResourceSync web synchronization framework'
   spec.license = 'MIT'
 
   origin_uri = URI(`git config --get remote.origin.url`.chomp)
