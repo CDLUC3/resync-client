@@ -23,9 +23,7 @@ RSpec.configure do |config|
   config.mock_with :rspec
 end
 
-require 'rspec_custom_matchers'
-
 # ------------------------------------------------------------
-# Stash::Harvester
+# resync-client
 
-require 'resync'
+require 'resync/client'
