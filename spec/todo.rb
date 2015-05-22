@@ -1,19 +1,9 @@
 require 'rspec/core'
-require 'resync'
+require 'resync/client'
 
 # List of TODO items in spec form
-describe Resync do
-
-  describe 'library' do
-    describe 'change lists' do
-      it 'can get the set of all resource URIs (collapsing URIs with multiple changes)'
-      it 'can find the most recent change for a given URI'
-    end
-
-    it 'enforces the required/forbidden time attribute table in appendix a of the spec'
-  end
-
-  describe 'client' do
+module Resync
+  describe Client do
     describe 'discovery' do
       it 'retrieves a Source Description from a URI'
     end
@@ -72,5 +62,4 @@ describe Resync do
     it 'does something clever for mirrors, alternate representations, and related resources'
 
   end
-
 end
