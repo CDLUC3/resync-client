@@ -2,13 +2,14 @@ require 'faraday'
 
 module Resync
   class Client
-    def initialize(faraday_client: nil)
-      @http_client = faraday_client || Faraday.new
+    def initialize(connection: nil)
+      @connection = connection || Faraday.new
     end
 
     def get(uri)
-      data = @http_client.get(uri)
-      XMLParser.parse(data)
+      uri = Resync::XML.to_uri(uri).to_s
+      data = @connection.get(uri)
+      XMLParser.parse(xml: data)
     end
   end
 end
