@@ -8,8 +8,8 @@ module Resync
 
     def get(uri)
       uri = Resync::XML.to_uri(uri).to_s
-      data = @connection.get(uri)
-      XMLParser.parse(xml: data)
+      response = @connection.get(uri)
+      XMLParser.parse(xml: response.body)
     end
   end
 end
