@@ -8,7 +8,9 @@ require 'lib/resync/client'
 
 client = Resync::Client.new
 
+# Note: this URI is from resync-simulator: https://github.com/resync/resync-simulator
 source_desc_uri = 'http://localhost:8888/.well-known/resourcesync'
+
 puts "Source: #{source_desc_uri}"
 source_desc = client.get(source_desc_uri)
 
