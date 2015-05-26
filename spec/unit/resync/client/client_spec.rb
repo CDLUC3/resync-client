@@ -90,6 +90,19 @@ module Resync
         expect(@connection).to receive(:get).with('http://example.org/resource-list-index.xml') { data }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::ResourceListIndex)
-      end    end
+      end
+
+    end
+
+    describe '#new' do
+      it 'creates its own connection if none is provided' do
+        data = File.read('spec/data/examples/capability-list.xml')
+        expect(Faraday).to receive(:new).and_return(@connection)
+        expect(@connection).to receive(:get).with('http://example.org/capability-list.xml') { data }
+        client = Client.new
+        client.get(URI('http://example.org/capability-list.xml'))
+      end
+    end
+
   end
 end
