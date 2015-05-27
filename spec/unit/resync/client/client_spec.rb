@@ -103,6 +103,14 @@ module Resync
         expect(doc).to be_a(Resync::ResourceListIndex)
       end
 
+      it 'injects the client into the returned document' do
+        uri = URI('http://example.org/resource-list-index.xml')
+        data = File.read('spec/data/examples/resource-list-index.xml')
+        expect(@response).to receive(:body) { data }
+        expect(@connection).to receive(:get).with('http://example.org/resource-list-index.xml') { @response }
+        doc = @client.get(uri)
+        expect(doc.client).to be(@client)
+      end
     end
 
     describe '#new' do
