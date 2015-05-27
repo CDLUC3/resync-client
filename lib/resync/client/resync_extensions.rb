@@ -12,10 +12,11 @@ module Resync
     alias_method :base_links=, :links=
     def links=(value)
       self.base_links = value
+      self.base_links = value
+      parent = self
       links.each do |l|
-        l.instance_variable_set('@container', self)
-        def l.client
-          @container.client
+        l.define_singleton_method(:client) do
+          parent.client
         end
       end
     end
@@ -25,10 +26,10 @@ module Resync
     alias_method :base_resources=, :resources=
     def resources=(value)
       self.base_resources = value
+      parent = self
       resources.each do |r|
-        r.instance_variable_set('@container', self)
-        def r.client
-          @container.client
+        r.define_singleton_method(:client) do
+          parent.client
         end
       end
     end
