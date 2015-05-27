@@ -11,31 +11,35 @@ client = Resync::Client.new
 # Note: this URI is from resync-simulator: https://github.com/resync/resync-simulator
 source_desc_uri = 'http://localhost:8888/.well-known/resourcesync'
 puts "Source: #{source_desc_uri}"
-source_desc = client.get(source_desc_uri)
-desc_ln = source_desc.link_for(rel: 'describedby')
-puts "  Described by: #{desc_ln.href}"
-puts
+source_desc = client.get(source_desc_uri) # Resync::SourceDescription
 
-cap_list_uri = source_desc.resource_for(capability: 'capabilitylist').uri
-puts "Capability list: #{cap_list_uri}"
-puts
+cap_list_resource = source_desc.resource_for(capability: 'capabilitylist')
+cap_list = cap_list_resource.get # Resync::CapabilityList
 
-cap_list = client.get(cap_list_uri)
-change_list_uri = cap_list.resource_for(capability: 'changelist').uri
-puts "Change list: #{change_list_uri}"
-
-change_list = client.get(change_list_uri)
+change_list_resource = cap_list.resource_for(capability: 'changelist')
+change_list = change_list_resource.get # Resync::ChangeList
 puts "  from:    #{change_list.metadata.from_time}"
 puts "  until:   #{change_list.metadata.until_time}"
-changes = change_list.resources
+
+changes = change_list.resources # Array<Resync::Resource>
 puts "  changes: #{changes.size}"
 puts
 
-last = changes.size > 5 ? 5 : changes.size
-puts "last #{last} changes:"
-changes.slice(-last, last).each do |r|
+n = changes.size > 5 ? 5 : changes.size
+puts "last #{n} changes of any kind:"
+changes.slice(-n, n).each do |r|
   puts "  #{r.uri}"
   puts "    modified at: #{r.modified_time}"
   puts "    change type: #{r.metadata.change}"
   puts "    md5:         #{r.metadata.hash('md5')}"
 end
+
+last_update = changes.select { |r| r.metadata.change == Resync::Types::Change::UPDATED }[-1]
+puts 'last update:'
+puts "  #{last_update.uri}"
+puts "    modified at: #{last_update.modified_time}"
+puts "    change type: #{last_update.metadata.change}"
+puts "    md5:         #{last_update.metadata.hash('md5')}"
+
+last_update_response = last_update.get_raw # Faraday::Response
+puts "    content:     #{last_update_response.body}"
