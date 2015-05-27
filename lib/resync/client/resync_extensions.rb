@@ -36,6 +36,7 @@ module Resync
     end
   end
 
+  # TODO: abstract these into a module
   class Resource
     def get
       client.get(uri)
@@ -43,6 +44,10 @@ module Resync
 
     def get_raw # rubocop:disable Style/AccessorMethodName
       client.get_raw(uri)
+    end
+
+    def get_file # rubocop:disable Style/AccessorMethodName
+      client.get_file(uri)
     end
   end
 
@@ -54,6 +59,10 @@ module Resync
     def get_raw # rubocop:disable Style/AccessorMethodName
       client.get_raw(href)
     end
+
+    def get_file # rubocop:disable Style/AccessorMethodName
+      client.get_file(uri)
+    end
   end
 
   class ResourceDump
@@ -64,4 +73,3 @@ module Resync
     include Dump
   end
 end
-

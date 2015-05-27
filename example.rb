@@ -39,5 +39,9 @@ puts "    modified at: #{last_update.modified_time}"
 puts "    change type: #{last_update.metadata.change}"
 puts "    md5:         #{last_update.metadata.hash('md5')}"
 
-last_update_response = last_update.get_raw # Faraday::Response
+last_update_response = last_update.get_raw
+puts last_update_response.class
 puts "    content:     #{last_update_response.body}"
+
+last_update_file = last_update.get_file
+puts "    as file:     #{last_update_file}"
