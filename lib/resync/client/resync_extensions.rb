@@ -1,4 +1,5 @@
 require 'resync'
+require_relative 'dump'
 
 module Resync
 
@@ -55,4 +56,12 @@ module Resync
     end
   end
 
+  class ResourceDump
+    include Dump
+  end
+
+  class ChangeDump
+    include Dump
+  end
 end
+
