@@ -16,7 +16,7 @@ module Resync
         manifest_entry = @zipfile.find_entry('manifest.xml')
         fail "No manifest.xml found in zipfile #{@zipfile.name}" unless manifest_entry
         manifest_stream = manifest_entry.get_input_stream
-        @manifest = XMLParser.parse(xml: manifest_stream)
+        @manifest = XMLParser.parse(manifest_stream)
       end
       @manifest
     end

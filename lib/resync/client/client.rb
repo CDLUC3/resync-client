@@ -9,7 +9,7 @@ module Resync
     def get(uri)
       uri = Resync::XML.to_uri(uri).to_s
       response = get_raw(uri)
-      doc = XMLParser.parse(xml: response.body)
+      doc = XMLParser.parse(response.body)
       doc.client = self
       doc
     end
