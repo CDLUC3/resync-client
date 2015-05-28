@@ -69,11 +69,11 @@ module Resync
 
       describe '#get_raw' do
         it 'gets the resource contents using the injected client' do
+          data = 'I am the contents of a resource'
           client = instance_double(Resync::Client)
-          response = instance_double(Faraday::Response)
           @list.client = client
-          expect(client).to receive(:get_raw).with(@resources[0].uri) { response }
-          expect(@resources[0].get_raw).to be(response)
+          expect(client).to receive(:get_raw).with(@resources[0].uri) { data }
+          expect(@resources[0].get_raw).to be(data)
         end
       end
     end
@@ -91,11 +91,11 @@ module Resync
 
       describe '#get_raw' do
         it 'gets the link contents using the injected client' do
+          data = 'I am the contents of a link'
           client = instance_double(Resync::Client)
-          response = instance_double(Faraday::Response)
           @list.client = client
-          expect(client).to receive(:get_raw).with(@links[0].href) { response }
-          expect(@links[0].get_raw).to be(response)
+          expect(client).to receive(:get_raw).with(@links[0].href) { data }
+          expect(@links[0].get_raw).to be(data)
         end
       end
     end

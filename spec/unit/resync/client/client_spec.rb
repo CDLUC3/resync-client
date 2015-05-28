@@ -3,9 +3,9 @@ require 'spec_helper'
 module Resync
   describe Client do
     before(:each) do
-      @connection = instance_double(Faraday::Connection)
-      @response = instance_double(Faraday::Response)
-      @client = Client.new(connection: @connection)
+      @http_client = instance_double(Client::HttpClient)
+      @response = instance_double(Net::HTTPResponse)
+      @client = Client.new(http_client: @http_client)
     end
 
     it 'handles file:// URIs'
@@ -17,7 +17,7 @@ module Resync
         uri = URI('http://example.org/capability-list.xml')
         data = File.read('spec/data/examples/capability-list.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/capability-list.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::CapabilityList)
       end
@@ -26,7 +26,7 @@ module Resync
         uri = URI('http://example.org/change-dump.xml')
         data = File.read('spec/data/examples/change-dump.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/change-dump.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::ChangeDump)
       end
@@ -35,7 +35,7 @@ module Resync
         uri = URI('http://example.org/change-dump-manifest.xml')
         data = File.read('spec/data/examples/change-dump-manifest.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/change-dump-manifest.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::ChangeDumpManifest)
       end
@@ -44,7 +44,7 @@ module Resync
         uri = URI('http://example.org/change-list.xml')
         data = File.read('spec/data/examples/change-list.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/change-list.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::ChangeList)
       end
@@ -53,7 +53,7 @@ module Resync
         uri = URI('http://example.org/resource-dump.xml')
         data = File.read('spec/data/examples/resource-dump.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/resource-dump.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::ResourceDump)
       end
@@ -62,7 +62,7 @@ module Resync
         uri = URI('http://example.org/resource-dump-manifest.xml')
         data = File.read('spec/data/examples/resource-dump-manifest.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/resource-dump-manifest.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::ResourceDumpManifest)
       end
@@ -71,7 +71,7 @@ module Resync
         uri = URI('http://example.org/resource-list.xml')
         data = File.read('spec/data/examples/resource-list.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/resource-list.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::ResourceList)
       end
@@ -80,7 +80,7 @@ module Resync
         uri = URI('http://example.org/source-description.xml')
         data = File.read('spec/data/examples/source-description.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/source-description.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::SourceDescription)
       end
@@ -89,7 +89,7 @@ module Resync
         uri = URI('http://example.org/change-list-index.xml')
         data = File.read('spec/data/examples/change-list-index.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/change-list-index.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::ChangeListIndex)
       end
@@ -98,7 +98,7 @@ module Resync
         uri = URI('http://example.org/resource-list-index.xml')
         data = File.read('spec/data/examples/resource-list-index.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/resource-list-index.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc).to be_a(Resync::ResourceListIndex)
       end
@@ -107,7 +107,7 @@ module Resync
         uri = URI('http://example.org/resource-list-index.xml')
         data = File.read('spec/data/examples/resource-list-index.xml')
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/resource-list-index.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         doc = @client.get(uri)
         expect(doc.client).to be(@client)
       end
@@ -115,12 +115,13 @@ module Resync
 
     describe '#new' do
       it 'creates its own connection if none is provided' do
+        uri = URI('http://example.org/capability-list.xml')
         data = File.read('spec/data/examples/capability-list.xml')
-        expect(Faraday).to receive(:new).and_return(@connection)
+        expect(Client::HttpClient).to receive(:new).and_return(@http_client)
         expect(@response).to receive(:body) { data }
-        expect(@connection).to receive(:get).with('http://example.org/capability-list.xml') { @response }
+        expect(@http_client).to receive(:fetch).with(uri) { @response }
         client = Client.new
-        client.get(URI('http://example.org/capability-list.xml'))
+        client.get(uri)
       end
     end
 
