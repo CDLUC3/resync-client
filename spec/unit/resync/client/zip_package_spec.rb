@@ -6,7 +6,7 @@ module Resync
     describe '#new' do
       it 'accepts a path to a ZIP file' do
         path = 'spec/data/resourcedump/resourcedump.zip'
-        pkg = ZipPackage.new(zipfile: path)
+        pkg = ZipPackage.new(path)
         zipfile = pkg.zipfile
         expect(zipfile).to be_a(Zip::File)
         expect(zipfile.name).to eq(path)
@@ -14,18 +14,18 @@ module Resync
 
       it 'accepts a Zip::File object' do
         zipfile = Zip::File.open('spec/data/resourcedump/resourcedump.zip')
-        pkg = ZipPackage.new(zipfile: zipfile)
+        pkg = ZipPackage.new(zipfile)
         expect(pkg.zipfile).to eq(zipfile)
       end
 
       it 'extracts a manifest' do
-        pkg = ZipPackage.new(zipfile: 'spec/data/resourcedump/resourcedump.zip')
+        pkg = ZipPackage.new('spec/data/resourcedump/resourcedump.zip')
         manifest = pkg.manifest
         expect(manifest).to be_a(Resync::ResourceDumpManifest)
       end
 
       it 'extracts entries' do
-        pkg = ZipPackage.new(zipfile: 'spec/data/resourcedump/resourcedump.zip')
+        pkg = ZipPackage.new('spec/data/resourcedump/resourcedump.zip')
         bitstreams = pkg.bitstreams
         expect(bitstreams.size).to eq(2)
 
