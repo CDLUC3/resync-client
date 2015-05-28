@@ -3,7 +3,7 @@ require 'spec_helper'
 module Resync
   describe Client do
     before(:each) do
-      @helper = instance_double(Client::HTTPHelper)
+      @helper = instance_double(HTTPHelper)
       @response = instance_double(Net::HTTPResponse)
       @client = Client.new(helper: @helper)
     end
@@ -117,7 +117,7 @@ module Resync
       it 'creates its own connection if none is provided' do
         uri = URI('http://example.org/capability-list.xml')
         data = File.read('spec/data/examples/capability-list.xml')
-        expect(Client::HTTPHelper).to receive(:new).and_return(@helper)
+        expect(HTTPHelper).to receive(:new).and_return(@helper)
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
         client = Client.new
