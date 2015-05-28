@@ -22,35 +22,33 @@ module Resync
         fail "Redirect limit (#{redirect_limit}) exceeded" if limit <= 0
         req = Net::HTTP::Get.new(uri, 'User-Agent' => user_agent)
         Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) do |http|
-          http.request(req) do |response|
-            case response
-            when Net::HTTPInformation
-              fetch_to_file(uri, limit)
-            when Net::HTTPSuccess
-              content_type = response['Content-Type']
-              mime_type = MIME::Types[content_type].first || MIME::Types['application/octet-stream'].first
-              extension = mime_type.preferred_extension || 'bin'
-              tempfile = Tempfile.new(['resync-client', ".#{extension}"])
-              ObjectSpace.undefine_finalizer(tempfile) # don't delete on exit
-              begin
-                open tempfile, 'w' do |out|
-                  response.read_body do |chunk|
-                    puts chunk.size
-                    out.write(chunk)
-                  end
+          response = http.request(req)
+          case response
+          when Net::HTTPInformation
+            fetch_to_file(uri, limit)
+          when Net::HTTPSuccess
+            content_type = response['Content-Type']
+            mime_type = MIME::Types[content_type].first || MIME::Types['application/octet-stream'].first
+            extension = mime_type.preferred_extension || 'bin'
+            tempfile = Tempfile.new(['resync-client', ".#{extension}"])
+            ObjectSpace.undefine_finalizer(tempfile) # don't delete on exit
+            begin
+              open tempfile, 'w' do |out|
+                response.read_body do |chunk|
+                  out.write(chunk)
                 end
-              ensure
-                tempfile.close
               end
-              return tempfile.path
-            when Net::HTTPRedirection
-              location = response['location']
-              new_uri = URI(location)
-              new_uri = uri + location if new_uri.relative?
-              fetch_to_file(new_uri, limit - 1)
-            else
-              fail "Error #{response.code}: #{response.message} retrieving URI #{uri}"
+            ensure
+              tempfile.close
             end
+            return tempfile.path
+          when Net::HTTPRedirection
+            location = response['location']
+            new_uri = URI(location)
+            new_uri = uri + location if new_uri.relative?
+            fetch_to_file(new_uri, limit - 1)
+          else
+            fail "Error #{response.code}: #{response.message} retrieving URI #{uri}"
           end
         end
       end
