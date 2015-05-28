@@ -6,7 +6,7 @@ require 'mime-types'
 module Resync
   class Client
 
-    class HttpClient
+    class HTTPHelper
 
       DEFAULT_MAX_REDIRECTS = 5
 

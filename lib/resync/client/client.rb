@@ -1,11 +1,11 @@
 require_relative 'version'
-require_relative 'http_client'
+require_relative 'http_helper'
 
 module Resync
   class Client
 
-    def initialize(http_client: HttpClient.new(user_agent: "resync-client #{VERSION}"))
-      @http_client = http_client
+    def initialize(helper: HTTPHelper.new(user_agent: "resync-client #{VERSION}"))
+      @helper = helper
     end
 
     def get(uri)
@@ -18,14 +18,13 @@ module Resync
 
     def get_raw(uri)
       uri = Resync::XML.to_uri(uri)
-      @http_client.fetch(uri).body
+      @helper.fetch(uri).body
     end
 
     def get_file(uri)
       uri = Resync::XML.to_uri(uri)
-      @http_client.fetch_to_file(uri)
+      @helper.fetch_to_file(uri)
     end
 
   end
 end
-
