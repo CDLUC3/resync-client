@@ -32,23 +32,10 @@ module Resync
       end
 
       def fetch(uri, limit = redirect_limit)
-        fail "Redirect limit (#{redirect_limit}) exceeded" if limit <= 0
+        fail "Redirect limit (#{redirect_limit}) exceeded retrieving URI #{uri}" if limit <= 0
         req = Net::HTTP::Get.new(uri, 'User-Agent' => user_agent)
         Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) do |http|
-          response = http.request(req)
-          case response
-          when Net::HTTPInformation
-            fetch(uri, limit)
-          when Net::HTTPRedirection
-            location = response['location']
-            new_uri = URI(location)
-            new_uri = uri + location if new_uri.relative?
-            fetch(new_uri, limit - 1)
-          when Net::HTTPSuccess
-            response
-          else
-            fail "Error #{response.code}: #{response.message} retrieving URI #{uri}"
-          end
+          handle_response(uri, limit, req, http)
         end
       end
 
@@ -58,6 +45,28 @@ module Resync
         content_type = response['Content-Type']
         mime_type = MIME::Types[content_type].first || MIME::Types['application/octet-stream'].first
         mime_type.preferred_extension || 'bin'
+      end
+
+      def redirect_uri_for(response, original_uri)
+        if response.is_a?(Net::HTTPInformation)
+          original_uri
+        else
+          location = response['location']
+          new_uri = URI(location)
+          new_uri.relative? ? original_uri + location : new_uri
+        end
+      end
+
+      def handle_response(uri, limit, req, http)
+        response = http.request(req)
+        case response
+        when Net::HTTPSuccess
+          response
+        when Net::HTTPInformation, Net::HTTPRedirection
+          fetch(redirect_uri_for(response, uri), limit - 1)
+        else
+          fail "Error #{response.code}: #{response.message} retrieving URI #{uri}"
+        end
       end
 
     end
