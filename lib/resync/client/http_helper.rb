@@ -20,16 +20,10 @@ module Resync
 
       def fetch_to_file(uri, limit = redirect_limit)
         response = fetch(uri, limit)
-        content_type = response['Content-Type']
-        mime_type = MIME::Types[content_type].first || MIME::Types['application/octet-stream'].first
-        extension = mime_type.preferred_extension || 'bin'
-        tempfile = Tempfile.new(['resync-client', ".#{extension}"])
-        ObjectSpace.undefine_finalizer(tempfile) # don't delete on exit
+        tempfile = Tempfile.new(['resync-client', ".#{extension_for(response)}"])
         begin
           open tempfile, 'w' do |out|
-            response.read_body do |chunk|
-              out.write(chunk)
-            end
+            response.read_body { |chunk| out.write(chunk) }
           end
           tempfile.path
         ensure
@@ -57,6 +51,15 @@ module Resync
           end
         end
       end
+
+      private
+
+      def extension_for(response)
+        content_type = response['Content-Type']
+        mime_type = MIME::Types[content_type].first || MIME::Types['application/octet-stream'].first
+        mime_type.preferred_extension || 'bin'
+      end
+
     end
   end
 end
