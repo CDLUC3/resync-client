@@ -31,7 +31,8 @@ module Resync
         allow(Net::HTTP).to receive(:new).and_return(@http)
         allow(@http).to receive(:start).and_yield(@http)
         @success = Net::HTTPOK.allocate
-        allow(@success).to receive(:body)
+        @body = 'I am the body of the response'
+        allow(@success).to receive(:body).and_return(@body)
       end
 
       # ------------------------------
@@ -45,7 +46,7 @@ module Resync
 
       it 'gets a response' do
         expect(@http).to receive(:request).and_yield(@success)
-        expect(helper.fetch(URI('http://example.org/'))).to be(@success)
+        expect(helper.fetch(URI('http://example.org/'))).to be(@body)
       end
 
       it 'sets the User-Agent header' do
@@ -71,7 +72,7 @@ module Resync
           block.call(expected.shift)
         end
 
-        expect(helper.fetch(uri)).to be(@success)
+        expect(helper.fetch(uri)).to be(@body)
       end
 
       it 'redirects on receiving a 3xx' do
@@ -81,7 +82,7 @@ module Resync
         allow(@redirect).to receive(:[]).with('location').and_return(uri2.to_s)
         expect(@http).to receive(:request).with(request_for(uri: uri, headers: { 'User-Agent' => user_agent })).and_yield(@redirect)
         expect(@http).to receive(:request).with(request_for(uri: uri2, headers: { 'User-Agent' => user_agent })).and_yield(@success)
-        expect(helper.fetch(uri)).to be(@success)
+        expect(helper.fetch(uri)).to be(@body)
       end
 
       it 'only redirects a limited number of times' do

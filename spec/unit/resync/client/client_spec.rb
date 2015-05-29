@@ -4,7 +4,6 @@ module Resync
   describe Client do
     before(:each) do
       @helper = instance_double(HTTPHelper)
-      @response = instance_double(Net::HTTPResponse)
       @client = Client.new(helper: @helper)
     end
 
@@ -12,8 +11,7 @@ module Resync
       it 'retrieves a CapabilityList' do
         uri = URI('http://example.org/capability-list.xml')
         data = File.read('spec/data/examples/capability-list.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::CapabilityList)
       end
@@ -21,8 +19,7 @@ module Resync
       it 'retrieves a ChangeDump' do
         uri = URI('http://example.org/change-dump.xml')
         data = File.read('spec/data/examples/change-dump.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeDump)
       end
@@ -30,8 +27,7 @@ module Resync
       it 'retrieves a ChangeDumpManifest' do
         uri = URI('http://example.org/change-dump-manifest.xml')
         data = File.read('spec/data/examples/change-dump-manifest.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeDumpManifest)
       end
@@ -39,8 +35,7 @@ module Resync
       it 'retrieves a ChangeList' do
         uri = URI('http://example.org/change-list.xml')
         data = File.read('spec/data/examples/change-list.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeList)
       end
@@ -48,8 +43,7 @@ module Resync
       it 'retrieves a ResourceDump' do
         uri = URI('http://example.org/resource-dump.xml')
         data = File.read('spec/data/examples/resource-dump.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceDump)
       end
@@ -57,8 +51,7 @@ module Resync
       it 'retrieves a ResourceDumpManifest' do
         uri = URI('http://example.org/resource-dump-manifest.xml')
         data = File.read('spec/data/examples/resource-dump-manifest.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceDumpManifest)
       end
@@ -66,8 +59,7 @@ module Resync
       it 'retrieves a ResourceList' do
         uri = URI('http://example.org/resource-list.xml')
         data = File.read('spec/data/examples/resource-list.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceList)
       end
@@ -75,8 +67,7 @@ module Resync
       it 'retrieves a SourceDescription' do
         uri = URI('http://example.org/source-description.xml')
         data = File.read('spec/data/examples/source-description.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::SourceDescription)
       end
@@ -84,8 +75,7 @@ module Resync
       it 'retrieves a ChangeListIndex' do
         uri = URI('http://example.org/change-list-index.xml')
         data = File.read('spec/data/examples/change-list-index.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeListIndex)
       end
@@ -93,8 +83,7 @@ module Resync
       it 'retrieves a ResourceListIndex' do
         uri = URI('http://example.org/resource-list-index.xml')
         data = File.read('spec/data/examples/resource-list-index.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceListIndex)
       end
@@ -102,8 +91,7 @@ module Resync
       it 'injects the client into the returned document' do
         uri = URI('http://example.org/resource-list-index.xml')
         data = File.read('spec/data/examples/resource-list-index.xml')
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc.client).to be(@client)
       end
@@ -114,8 +102,7 @@ module Resync
         uri = URI('http://example.org/capability-list.xml')
         data = File.read('spec/data/examples/capability-list.xml')
         expect(HTTPHelper).to receive(:new).and_return(@helper)
-        expect(@response).to receive(:body) { data }
-        expect(@helper).to receive(:fetch).with(uri) { @response }
+        expect(@helper).to receive(:fetch).with(uri).and_return(data)
         client = Client.new
         client.get_and_parse(uri)
       end

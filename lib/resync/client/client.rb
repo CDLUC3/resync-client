@@ -31,7 +31,7 @@ module Resync
     # Gets the content of the specified URI as a string.
     def get(uri)
       uri = Resync::XML.to_uri(uri)
-      @helper.fetch(uri).body
+      @helper.fetch(uri)
     end
 
     # Gets the content of the specified URI and saves it to a temporary file.

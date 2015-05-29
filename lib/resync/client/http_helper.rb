@@ -44,8 +44,7 @@ module Resync
 
     def fetch(uri, limit = redirect_limit)
       make_request(uri, limit) do |success|
-        success.body # ensure it gets populated
-        return success
+        success.body
       end
     end
 
