@@ -8,10 +8,6 @@ module Resync
       @client = Client.new(helper: @helper)
     end
 
-    it 'handles file:// URIs'
-    it 'handles http URIs'
-    it 'handles https URIs'
-
     describe '#get' do
       it 'retrieves a CapabilityList' do
         uri = URI('http://example.org/capability-list.xml')
@@ -122,6 +118,15 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri) { @response }
         client = Client.new
         client.get(uri)
+      end
+    end
+
+    describe '#get_file' do
+      it 'delegates to the helper' do
+        uri = 'http://example.org/capability-list.xml'
+        path = '/tmp/whatever.zip'
+        expect(@helper).to receive(:fetch_to_file).with(URI(uri)).and_return(path)
+        expect(@client.get_file(uri)).to eq(path)
       end
     end
 

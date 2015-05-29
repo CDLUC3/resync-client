@@ -61,7 +61,7 @@ module Resync
     end
 
     def get_file # rubocop:disable Style/AccessorMethodName
-      client.get_file(uri)
+      client.get_file(href)
     end
   end
 

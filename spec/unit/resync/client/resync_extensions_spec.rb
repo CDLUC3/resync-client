@@ -3,6 +3,9 @@ require 'spec_helper'
 module Resync
   describe 'extensions' do
 
+    # ------------------------------------------------------------
+    # Fixture
+
     before(:each) do
       @resources = [
         Resource.new(uri: 'http://example.com/dataset1/resourcelist.xml', metadata: Metadata.new(capability: 'resourcelist')),
@@ -18,6 +21,9 @@ module Resync
       ]
       @list = ResourceList.new(resources: @resources, links: @links)
     end
+
+    # ------------------------------------------------------------
+    # Tests
 
     describe BaseResourceList do
 
@@ -76,6 +82,16 @@ module Resync
           expect(@resources[0].get_raw).to be(data)
         end
       end
+
+      describe '#get_file' do
+        it 'downloads the resource contents to a file using the injected client' do
+          path = '/tmp/whatever.zip'
+          client = instance_double(Resync::Client)
+          @list.client = client
+          expect(client).to receive(:get_file).with(@resources[0].uri) { path }
+          expect(@resources[0].get_file).to be(path)
+        end
+      end
     end
 
     describe Link do
@@ -96,6 +112,16 @@ module Resync
           @list.client = client
           expect(client).to receive(:get_raw).with(@links[0].href) { data }
           expect(@links[0].get_raw).to be(data)
+        end
+      end
+
+      describe '#get_file' do
+        it 'downloads the link contents to a file using the injected client' do
+          path = '/tmp/whatever.zip'
+          client = instance_double(Resync::Client)
+          @list.client = client
+          expect(client).to receive(:get_file).with(@links[0].href) { path }
+          expect(@links[0].get_file).to be(path)
         end
       end
     end
