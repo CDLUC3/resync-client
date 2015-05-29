@@ -43,16 +43,12 @@ module Resync
     private
 
     def zipfile=(value)
-      if value.is_a?(Zip::File)
-        @zipfile = value
-      else
-        @zipfile = Zip::File.open(value)
-      end
-
-      manifest_entry = @zipfile.find_entry('manifest.xml')
-      fail "No manifest.xml found in zipfile #{@zipfile.name}" unless manifest_entry
+      zipfile = value.is_a?(Zip::File) ? value : Zip::File.open(value)
+      manifest_entry = zipfile.find_entry('manifest.xml')
+      fail "No manifest.xml found in zipfile #{zipfile.name}" unless manifest_entry
       manifest_stream = manifest_entry.get_input_stream
       @manifest = XMLParser.parse(manifest_stream)
+      @zipfile = zipfile
     end
 
   end
