@@ -67,7 +67,7 @@ module Resync
 
     # Delegates to {Client#get_and_parse} to get the contents of
     # this resource as a ResourceSync document
-    def get_and_parse
+    def get_and_parse # rubocop:disable Style/AccessorMethodName
       client.get_and_parse(uri)
     end
 
@@ -91,7 +91,7 @@ module Resync
 
     # Delegates to {Client#get_and_parse} to get the contents of
     # this link as a ResourceSync document
-    def get_and_parse
+    def get_and_parse # rubocop:disable Style/AccessorMethodName
       client.get_and_parse(href)
     end
 

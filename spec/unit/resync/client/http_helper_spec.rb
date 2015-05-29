@@ -65,7 +65,12 @@ module Resync
       it 're-requests on receiving a 1xx' do
         uri = URI('http://example.org/')
         @info = Net::HTTPContinue.allocate
-        expect(@http).to receive(:request).with(request_for(uri: uri, headers: { 'User-Agent' => user_agent })).and_return(@info, @success)
+
+        expected = [@info, @success]
+        expect(@http).to receive(:request).twice.with(request_for(uri: uri, headers: { 'User-Agent' => user_agent })) do |&block|
+          block.call(expected.shift)
+        end
+
         expect(helper.fetch(uri)).to be(@success)
       end
 
@@ -164,7 +169,12 @@ module Resync
       it 're-requests on receiving a 1xx' do
         uri = URI('http://example.org/')
         @info = Net::HTTPContinue.allocate
-        expect(@http).to receive(:request).with(request_for(uri: uri, headers: { 'User-Agent' => user_agent })).and_yield(@info, @success)
+
+        expected = [@info, @success]
+        expect(@http).to receive(:request).twice.with(request_for(uri: uri, headers: { 'User-Agent' => user_agent })) do |&block|
+          block.call(expected.shift)
+        end
+
         @path = helper.fetch_to_file(uri)
         expect(File.read(@path)).to eq(@data)
       end
