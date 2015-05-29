@@ -43,18 +43,18 @@ module Resync
     # Public methods
 
     def fetch(uri, limit = redirect_limit)
-      make_request(uri, limit) do |response|
-        response.body # ensure it gets populated
-        return response
+      make_request(uri, limit) do |success|
+        success.body # ensure it gets populated
+        return success
       end
     end
 
     def fetch_to_file(uri, limit = redirect_limit)
-      make_request(uri, limit) do |response|
-        tempfile = Tempfile.new(['resync-client', ".#{extension_for(response)}"])
+      make_request(uri, limit) do |success|
+        tempfile = Tempfile.new(['resync-client', ".#{extension_for(success)}"])
         begin
           open tempfile, 'w' do |out|
-            response.read_body { |chunk| out.write(chunk) }
+            success.read_body { |chunk| out.write(chunk) }
           end
           return tempfile.path
         ensure
