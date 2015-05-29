@@ -6,15 +6,20 @@ module Resync
   # A ZIP package of resources or changes, providing access to individual
   # bitstreams based on the included manifest file.
   #
-  # @!attribute [r] zipfile
-  #   @return [Zip::File] the ZIP file wrapped by this package
-  # @!attribute [r] manifest
-  #   @return [ResourceDumpManifest, ChangeDumpManifest] the manifest
-  #     for the ZIP package
   class ZipPackage
 
+    # ------------------------------------------------------------
+    # Attributes
+
+    # @return [Zip::File] the ZIP file wrapped by this package
     attr_reader :zipfile
+
+    # @return [ResourceDumpManifest, ChangeDumpManifest] the manifest
+    #   for the ZIP package
     attr_reader :manifest
+
+    # ------------------------------------------------------------
+    # Initializer
 
     # Creates a new +ZipPackage+ for the specified file.
     #
@@ -22,6 +27,9 @@ module Resync
     def initialize(zipfile)
       self.zipfile = zipfile
     end
+
+    # ------------------------------------------------------------
+    # Public methods
 
     # Gets the bitstream for the specified resource. (Note that this
     # does no validation; if the resource is not in the manifest, or
@@ -39,6 +47,9 @@ module Resync
     def bitstreams
       manifest.resources.map { |r| bitstream_for(r) }
     end
+
+    # ------------------------------------------------------------
+    # Private methods
 
     private
 

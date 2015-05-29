@@ -9,8 +9,14 @@ module Resync
   #
   class HTTPHelper
 
+    # ------------------------------------------------------------
+    # Constants
+
     # The default number of redirects to follow before erroring out.
     DEFAULT_MAX_REDIRECTS = 5
+
+    # ------------------------------------------------------------
+    # Accessors
 
     # @!attribute [rw] user_agent
     #   @return [String] the User-Agent string to send when making requests
@@ -19,6 +25,9 @@ module Resync
     # @!attribute [rw] redirect_limit
     #   @return [Integer] the number of redirects to follow before erroring out
     attr_accessor :redirect_limit
+
+    # ------------------------------------------------------------
+    # Initializer
 
     # Creates a new +HTTPHelper+
     #
@@ -29,6 +38,9 @@ module Resync
       @user_agent = user_agent
       @redirect_limit = redirect_limit
     end
+
+    # ------------------------------------------------------------
+    # Public methods
 
     # Gets the content of the specified URI as a
     # {http://ruby-doc.org/stdlib-2.2.2/libdoc/net/http/rdoc/Net/HTTPResponse.html Net::HTTPResponse}
@@ -64,6 +76,9 @@ module Resync
         end
       end
     end
+
+    # ------------------------------------------------------------
+    # Private methods
 
     private
 

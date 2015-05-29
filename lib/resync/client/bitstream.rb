@@ -1,16 +1,18 @@
 module Resync
 
   # A single entry in a ZIP package.
-  # @!attribute [r] path
-  #   @return [String] the path to the entry within the ZIP file
-  # @!attribute [r] resource
-  #   @return [Resource] the resource describing this bitstream
-  # @!attribute [r] metadata
-  #   @return [Metadata] the metadata for this bitstream
   class Bitstream
 
+    # ------------------------------------------------------------
+    # Attributes
+
+    # @return [String] the path to the entry within the ZIP file
     attr_reader :path
+
+    # @return [Resource] the resource describing this bitstream
     attr_reader :resource
+
+    # @return [Metadata] the metadata for this bitstream
     attr_reader :metadata
 
     # ------------------------------------------------------------
@@ -24,6 +26,9 @@ module Resync
       self.resource = resource
       @zip_entry = zipfile.find_entry(@path)
     end
+
+    # ------------------------------------------------------------
+    # Convenience accessors
 
     # The (uncompressed) size of the bitstream.
     def size
@@ -46,6 +51,9 @@ module Resync
     def mime_type
       @mime_type ||= metadata.mime_type
     end
+
+    # ------------------------------------------------------------
+    # Private methods
 
     private
 

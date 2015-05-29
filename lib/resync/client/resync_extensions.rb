@@ -4,6 +4,9 @@ require_relative 'dump'
 # Extensions to the core Resync classes to simplify retrieval
 module Resync
 
+  # ------------------------------------------------------------
+  # Base classes
+
   # Injects a {Client} that subclasses can use to fetch
   # resources and links
   #
@@ -53,6 +56,9 @@ module Resync
     end
   end
 
+  # ------------------------------------------------------------
+  # Resource and Link
+
   # Adds +get+, +get_raw+, and +get_file+ methods, delegating
   # to the injected client.
   #
@@ -100,6 +106,9 @@ module Resync
       client.download_to_temp_file(href)
     end
   end
+
+  # ------------------------------------------------------------
+  # ResourceDump and ChaneDump
 
   # Includes the {Dump} module
   class ResourceDump

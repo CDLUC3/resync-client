@@ -6,12 +6,18 @@ module Resync
   # Utility class for retrieving HTTP content and parsing it as ResourceSync documents.
   class Client
 
+    # ------------------------------------------------------------
+    # Initializer
+
     # Creates a new +Client+
     # @param helper [HTTPHelper] the HTTP helper. Defaults to a new HTTP helper with
     #   +resync-client VERSION+ as the User-Agent string.
     def initialize(helper: HTTPHelper.new(user_agent: "resync-client #{VERSION}"))
       @helper = helper
     end
+
+    # ------------------------------------------------------------
+    # Public methods
 
     # Gets the content of the specified URI and parses it as a ResourceSync document.
     def get_and_parse(uri)
