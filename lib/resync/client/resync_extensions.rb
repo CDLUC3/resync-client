@@ -59,22 +59,21 @@ module Resync
   # @see Augmented#client
   class Resource
 
-    # Delegates to {Client#get} to get the contents of
-    # this resource
-    def get
+    # Delegates to {Client#get_and_parse} to get the contents of
+    # this resource as a ResourceSync document
+    def get_and_parse
+      client.get_and_parse(uri)
+    end
+
+    # Delegates to {Client#get} to get the contents of this resource
+    def get # rubocop:disable Style/AccessorMethodName
       client.get(uri)
     end
 
-    # Delegates to {Client#get_raw} to get this link as
-    # a {http://ruby-doc.org/stdlib-2.2.2/libdoc/net/http/rdoc/Net/HTTPResponse.html Net::HTTPResponse}
-    def get_raw # rubocop:disable Style/AccessorMethodName
-      client.get_raw(uri)
-    end
-
-    # Delegates to {Client#get_file} to download this
+    # Delegates to {Client#download_to_temp_file} to download this
     # resource to a file.
-    def get_file # rubocop:disable Style/AccessorMethodName
-      client.get_file(uri)
+    def download_to_temp_file # rubocop:disable Style/AccessorMethodName
+      client.download_to_temp_file(uri)
     end
   end
 
@@ -84,22 +83,21 @@ module Resync
   # @see Augmented#client
   class Link
 
-    # Delegates to {Client#get} to get the contents of
-    # this link
-    def get
+    # Delegates to {Client#get_and_parse} to get the contents of
+    # this link as a ResourceSync document
+    def get_and_parse
+      client.get_and_parse(href)
+    end
+
+    # Delegates to {Client#get} to get the contents of this link
+    def get # rubocop:disable Style/AccessorMethodName
       client.get(href)
     end
 
-    # Delegates to {Client#get_raw} to get this resource as
-    # a {http://ruby-doc.org/stdlib-2.2.2/libdoc/net/http/rdoc/Net/HTTPResponse.html Net::HTTPResponse}
-    def get_raw # rubocop:disable Style/AccessorMethodName
-      client.get_raw(href)
-    end
-
-    # Delegates to {Client#get_file} to download this
+    # Delegates to {Client#download_to_temp_file} to download this
     # link to a file.
-    def get_file # rubocop:disable Style/AccessorMethodName
-      client.get_file(href)
+    def download_to_temp_file # rubocop:disable Style/AccessorMethodName
+      client.download_to_temp_file(href)
     end
   end
 

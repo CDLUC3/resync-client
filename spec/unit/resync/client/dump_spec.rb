@@ -5,7 +5,7 @@ module Resync
     it 'transparently extracts bitstreams' do
       package_uri = URI('http://example.com/resourcedump.zip')
       client = instance_double(Client)
-      expect(client).to receive(:get_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
+      expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
 
       resource_dump = XMLParser.parse(File.read('spec/data/resourcedump/resourcedump.xml'))
       resource_dump.client = client

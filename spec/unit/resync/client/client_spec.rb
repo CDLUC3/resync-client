@@ -14,7 +14,7 @@ module Resync
         data = File.read('spec/data/examples/capability-list.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::CapabilityList)
       end
 
@@ -23,7 +23,7 @@ module Resync
         data = File.read('spec/data/examples/change-dump.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeDump)
       end
 
@@ -32,7 +32,7 @@ module Resync
         data = File.read('spec/data/examples/change-dump-manifest.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeDumpManifest)
       end
 
@@ -41,7 +41,7 @@ module Resync
         data = File.read('spec/data/examples/change-list.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeList)
       end
 
@@ -50,7 +50,7 @@ module Resync
         data = File.read('spec/data/examples/resource-dump.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceDump)
       end
 
@@ -59,7 +59,7 @@ module Resync
         data = File.read('spec/data/examples/resource-dump-manifest.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceDumpManifest)
       end
 
@@ -68,7 +68,7 @@ module Resync
         data = File.read('spec/data/examples/resource-list.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceList)
       end
 
@@ -77,7 +77,7 @@ module Resync
         data = File.read('spec/data/examples/source-description.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::SourceDescription)
       end
 
@@ -86,7 +86,7 @@ module Resync
         data = File.read('spec/data/examples/change-list-index.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeListIndex)
       end
 
@@ -95,7 +95,7 @@ module Resync
         data = File.read('spec/data/examples/resource-list-index.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceListIndex)
       end
 
@@ -104,7 +104,7 @@ module Resync
         data = File.read('spec/data/examples/resource-list-index.xml')
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
-        doc = @client.get(uri)
+        doc = @client.get_and_parse(uri)
         expect(doc.client).to be(@client)
       end
     end
@@ -117,7 +117,7 @@ module Resync
         expect(@response).to receive(:body) { data }
         expect(@helper).to receive(:fetch).with(uri) { @response }
         client = Client.new
-        client.get(uri)
+        client.get_and_parse(uri)
       end
     end
 
@@ -126,7 +126,7 @@ module Resync
         uri = 'http://example.org/capability-list.xml'
         path = '/tmp/whatever.zip'
         expect(@helper).to receive(:fetch_to_file).with(URI(uri)).and_return(path)
-        expect(@client.get_file(uri)).to eq(path)
+        expect(@client.download_to_temp_file(uri)).to eq(path)
       end
     end
 

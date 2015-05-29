@@ -14,22 +14,22 @@ module Resync
     end
 
     # Gets the content of the specified URI and parses it as a ResourceSync document.
-    def get(uri)
+    def get_and_parse(uri)
       uri = Resync::XML.to_uri(uri)
-      raw_contents = get_raw(uri)
+      raw_contents = get(uri)
       doc = XMLParser.parse(raw_contents)
       doc.client = self
       doc
     end
 
-    # Gets the content of the specified URI and returns the HTTP response.
-    def get_raw(uri)
+    # Gets the content of the specified URI as a string.
+    def get(uri)
       uri = Resync::XML.to_uri(uri)
       @helper.fetch(uri).body
     end
 
     # Gets the content of the specified URI and saves it to a temporary file.
-    def get_file(uri)
+    def download_to_temp_file(uri)
       uri = Resync::XML.to_uri(uri)
       @helper.fetch_to_file(uri)
     end

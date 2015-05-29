@@ -68,8 +68,8 @@ module Resync
           client = instance_double(Resync::Client)
           resource = instance_double(Resync::ResourceList)
           @list.client = client
-          expect(client).to receive(:get).with(@resources[0].uri) { resource }
-          expect(@resources[0].get).to be(resource)
+          expect(client).to receive(:get_and_parse).with(@resources[0].uri) { resource }
+          expect(@resources[0].get_and_parse).to be(resource)
         end
       end
 
@@ -78,8 +78,8 @@ module Resync
           data = 'I am the contents of a resource'
           client = instance_double(Resync::Client)
           @list.client = client
-          expect(client).to receive(:get_raw).with(@resources[0].uri) { data }
-          expect(@resources[0].get_raw).to be(data)
+          expect(client).to receive(:get).with(@resources[0].uri) { data }
+          expect(@resources[0].get).to be(data)
         end
       end
 
@@ -88,8 +88,8 @@ module Resync
           path = '/tmp/whatever.zip'
           client = instance_double(Resync::Client)
           @list.client = client
-          expect(client).to receive(:get_file).with(@resources[0].uri) { path }
-          expect(@resources[0].get_file).to be(path)
+          expect(client).to receive(:download_to_temp_file).with(@resources[0].uri) { path }
+          expect(@resources[0].download_to_temp_file).to be(path)
         end
       end
     end
@@ -100,8 +100,8 @@ module Resync
           client = instance_double(Resync::Client)
           resource = instance_double(Resync::ResourceList)
           @list.client = client
-          expect(client).to receive(:get).with(@links[0].href) { resource }
-          expect(@links[0].get).to be(resource)
+          expect(client).to receive(:get_and_parse).with(@links[0].href) { resource }
+          expect(@links[0].get_and_parse).to be(resource)
         end
       end
 
@@ -110,8 +110,8 @@ module Resync
           data = 'I am the contents of a link'
           client = instance_double(Resync::Client)
           @list.client = client
-          expect(client).to receive(:get_raw).with(@links[0].href) { data }
-          expect(@links[0].get_raw).to be(data)
+          expect(client).to receive(:get).with(@links[0].href) { data }
+          expect(@links[0].get).to be(data)
         end
       end
 
@@ -120,8 +120,8 @@ module Resync
           path = '/tmp/whatever.zip'
           client = instance_double(Resync::Client)
           @list.client = client
-          expect(client).to receive(:get_file).with(@links[0].href) { path }
-          expect(@links[0].get_file).to be(path)
+          expect(client).to receive(:download_to_temp_file).with(@links[0].href) { path }
+          expect(@links[0].download_to_temp_file).to be(path)
         end
       end
     end

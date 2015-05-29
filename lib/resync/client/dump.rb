@@ -11,7 +11,7 @@ module Resync
       super
       resources.each do |r|
         def r.zip_package
-          @zip_package ||= ZipPackage.new(get_file)
+          @zip_package ||= ZipPackage.new(download_to_temp_file)
         end
       end
     end
