@@ -44,35 +44,21 @@ module Resync
 
     def fetch(uri, limit = redirect_limit)
       make_request(uri, limit) do |response|
-        case response
-        when Net::HTTPSuccess
-          response.body # ensure it gets populated
-          return response
-        when Net::HTTPInformation, Net::HTTPRedirection
-          fetch(redirect_uri_for(response, uri), limit - 1)
-        else
-          fail "Error #{response.code}: #{response.message} retrieving URI #{uri}"
-        end
+        response.body # ensure it gets populated
+        return response
       end
     end
 
     def fetch_to_file(uri, limit = redirect_limit)
       make_request(uri, limit) do |response|
-        case response
-        when Net::HTTPSuccess
-          tempfile = Tempfile.new(['resync-client', ".#{extension_for(response)}"])
-          begin
-            open tempfile, 'w' do |out|
-              response.read_body { |chunk| out.write(chunk) }
-            end
-            return tempfile.path
-          ensure
-            tempfile.close
+        tempfile = Tempfile.new(['resync-client', ".#{extension_for(response)}"])
+        begin
+          open tempfile, 'w' do |out|
+            response.read_body { |chunk| out.write(chunk) }
           end
-        when Net::HTTPInformation, Net::HTTPRedirection
-          fetch_to_file(redirect_uri_for(response, uri), limit - 1)
-        else
-          fail "Error #{response.code}: #{response.message} retrieving URI #{uri}"
+          return tempfile.path
+        ensure
+          tempfile.close
         end
       end
     end
@@ -86,7 +72,16 @@ module Resync
       fail "Redirect limit (#{redirect_limit}) exceeded retrieving URI #{uri}" if limit <= 0
       req = Net::HTTP::Get.new(uri, 'User-Agent' => user_agent)
       Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) do |http|
-        http.request(req, &block)
+        http.request(req) do |response|
+          case response
+          when Net::HTTPSuccess
+            block.call(response)
+          when Net::HTTPInformation, Net::HTTPRedirection
+            make_request(redirect_uri_for(response, uri), limit - 1, &block)
+          else
+            fail "Error #{response.code}: #{response.message} retrieving URI #{uri}"
+          end
+        end
       end
     end
 
