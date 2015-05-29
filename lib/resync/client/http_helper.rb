@@ -7,23 +7,24 @@ module Resync
 
   # Utility class simplifying GET requests for HTTP/HTTPS resources.
   #
-  # @!attribute [rw] user_agent
-  #   @return [String] the User-Agent string to send when making requests
-  # @!attribute [rw] redirect_limit
-  #   @return [Integer] the number of redirects to follow before erroring out
   class HTTPHelper
 
     # The default number of redirects to follow before erroring out.
     DEFAULT_MAX_REDIRECTS = 5
 
+    # @!attribute [rw] user_agent
+    #   @return [String] the User-Agent string to send when making requests
     attr_accessor :user_agent
+
+    # @!attribute [rw] redirect_limit
+    #   @return [Integer] the number of redirects to follow before erroring out
     attr_accessor :redirect_limit
 
     # Creates a new +HTTPHelper+
     #
     # @param user_agent [String] the User-Agent string to send when making requests
     # @param redirect_limit [Integer] the number of redirects to follow before erroring out
-    #   (defaults to {#DEFAULT_MAX_REDIRECTS})
+    #   (defaults to {DEFAULT_MAX_REDIRECTS})
     def initialize(user_agent:, redirect_limit: DEFAULT_MAX_REDIRECTS)
       @user_agent = user_agent
       @redirect_limit = redirect_limit
