@@ -14,10 +14,10 @@ module Resync
         Resource.new(uri: 'http://example.com/dataset1/changedump.xml', metadata: Metadata.new(capability: 'changedump'))
       ]
       @links = [
-        Link.new(rel: 'describedby', href: 'http://example.org/desc1'),
-        Link.new(rel: 'duplicate', href: 'http://example.com/dup1'),
-        Link.new(rel: 'describedby', href: 'http://example.org/desc2'),
-        Link.new(rel: 'duplicate', href: 'http://example.com/dup2')
+        Link.new(rel: 'describedby', uri: 'http://example.org/desc1'),
+        Link.new(rel: 'duplicate', uri: 'http://example.com/dup1'),
+        Link.new(rel: 'describedby', uri: 'http://example.org/desc2'),
+        Link.new(rel: 'duplicate', uri: 'http://example.com/dup2')
       ]
       @list = ResourceList.new(resources: @resources, links: @links)
     end
@@ -100,7 +100,7 @@ module Resync
           client = instance_double(Resync::Client)
           resource = instance_double(Resync::ResourceList)
           @list.client = client
-          expect(client).to receive(:get_and_parse).with(@links[0].href) { resource }
+          expect(client).to receive(:get_and_parse).with(@links[0].uri) { resource }
           expect(@links[0].get_and_parse).to be(resource)
         end
       end
@@ -110,7 +110,7 @@ module Resync
           data = 'I am the contents of a link'
           client = instance_double(Resync::Client)
           @list.client = client
-          expect(client).to receive(:get).with(@links[0].href) { data }
+          expect(client).to receive(:get).with(@links[0].uri) { data }
           expect(@links[0].get).to be(data)
         end
       end
@@ -120,7 +120,7 @@ module Resync
           path = '/tmp/whatever.zip'
           client = instance_double(Resync::Client)
           @list.client = client
-          expect(client).to receive(:download_to_temp_file).with(@links[0].href) { path }
+          expect(client).to receive(:download_to_temp_file).with(@links[0].uri) { path }
           expect(@links[0].download_to_temp_file).to be(path)
         end
       end
