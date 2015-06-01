@@ -44,7 +44,9 @@ module Resync
 
     def fetch(uri, limit = redirect_limit)
       make_request(uri, limit) do |success|
-        success.body
+        # not 100% clear why we need an explicit return here; it
+        # doesn't show up in unit tests but it does in example.rb
+        return success.body
       end
     end
 
