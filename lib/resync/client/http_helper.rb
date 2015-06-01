@@ -48,7 +48,7 @@ module Resync
       end
     end
 
-    def fetch_to_file(uri, limit = redirect_limit)
+    def fetch_to_file(uri, limit = redirect_limit) # rubocop:disable Metrics/MethodLength
       make_request(uri, limit) do |success|
         tempfile = Tempfile.new(['resync-client', ".#{extension_for(success)}"])
         begin
@@ -67,7 +67,7 @@ module Resync
 
     private
 
-    def make_request(uri, limit, &block)
+    def make_request(uri, limit, &block) # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       fail "Redirect limit (#{redirect_limit}) exceeded retrieving URI #{uri}" if limit <= 0
       req = Net::HTTP::Get.new(uri, 'User-Agent' => user_agent)
       Net::HTTP.start(uri.hostname, uri.port, use_ssl: (uri.scheme == 'https')) do |http|
