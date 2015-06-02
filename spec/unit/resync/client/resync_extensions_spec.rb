@@ -26,7 +26,6 @@ module Resync
     # Tests
 
     describe BaseResourceList do
-
       it 'proxies all resource client requests to its own client' do
         client = instance_double(Resync::Client)
         @list.client = client
@@ -63,7 +62,7 @@ module Resync
     end
 
     describe Resource do
-      describe '#get' do
+      describe '#get_and_parse' do
         it 'gets the resource using the injected client' do
           client = instance_double(Resync::Client)
           resource = instance_double(Resync::ResourceList)
@@ -73,7 +72,7 @@ module Resync
         end
       end
 
-      describe '#get_raw' do
+      describe '#get' do
         it 'gets the resource contents using the injected client' do
           data = 'I am the contents of a resource'
           client = instance_double(Resync::Client)
@@ -83,7 +82,7 @@ module Resync
         end
       end
 
-      describe '#get_file' do
+      describe '#download_to_temp_file' do
         it 'downloads the resource contents to a file using the injected client' do
           path = '/tmp/whatever.zip'
           client = instance_double(Resync::Client)
@@ -92,10 +91,20 @@ module Resync
           expect(@resources[0].download_to_temp_file).to be(path)
         end
       end
+
+      describe '#download_to_file' do
+        it 'delegates to the injected client' do
+          path = '/tmp/whatever.zip'
+          client = instance_double(Resync::Client)
+          @list.client = client
+          expect(client).to receive(:download_to_file).with(uri: @resources[0].uri, path: path) { path }
+          expect(@resources[0].download_to_file(path)).to be(path)
+        end
+      end
     end
 
     describe Link do
-      describe '#get' do
+      describe '#get_and_parse' do
         it 'gets the link using the injected client' do
           client = instance_double(Resync::Client)
           resource = instance_double(Resync::ResourceList)
@@ -105,7 +114,7 @@ module Resync
         end
       end
 
-      describe '#get_raw' do
+      describe '#get' do
         it 'gets the link contents using the injected client' do
           data = 'I am the contents of a link'
           client = instance_double(Resync::Client)
@@ -115,13 +124,23 @@ module Resync
         end
       end
 
-      describe '#get_file' do
+      describe '#download_to_temp_file' do
         it 'downloads the link contents to a file using the injected client' do
           path = '/tmp/whatever.zip'
           client = instance_double(Resync::Client)
           @list.client = client
           expect(client).to receive(:download_to_temp_file).with(@links[0].uri) { path }
           expect(@links[0].download_to_temp_file).to be(path)
+        end
+      end
+
+      describe '#download_to_file' do
+        it 'delegates to the injected client' do
+          path = '/tmp/whatever.zip'
+          client = instance_double(Resync::Client)
+          @list.client = client
+          expect(client).to receive(:download_to_file).with(uri: @links[0].uri, path: path) { path }
+          expect(@links[0].download_to_file(path)).to be(path)
         end
       end
     end

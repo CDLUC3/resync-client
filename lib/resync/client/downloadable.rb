@@ -23,6 +23,13 @@ module Resync
     def download_to_temp_file # rubocop:disable Style/AccessorMethodName
       client.download_to_temp_file(uri)
     end
+
+    # Delegates to {Client#download_to_file} to download the
+    # contents of +:uri+ to the specified path.
+    # @param path [String] the path to download to
+    def download_to_file(path)
+      client.download_to_file(uri: uri, path: path)
+    end
   end
 
 end
