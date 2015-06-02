@@ -47,4 +47,3 @@ last_update_file = last_update.download_to_temp_file
 last_update_file_contents = File.read(last_update_file)
 puts "    as file:      #{last_update_file}"
 puts "    file content: #{last_update_file_contents}"
-
