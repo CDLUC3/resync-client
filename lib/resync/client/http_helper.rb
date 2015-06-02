@@ -42,7 +42,8 @@ module Resync
     # ------------------------------------------------------------
     # Public methods
 
-    def fetch(uri, limit = redirect_limit)
+    #
+    def fetch(uri:, limit: redirect_limit)
       make_request(uri, limit) do |success|
         # not 100% clear why we need an explicit return here; it
         # doesn't show up in unit tests but it does in example.rb
@@ -50,17 +51,13 @@ module Resync
       end
     end
 
-    def fetch_to_file(uri, limit = redirect_limit) # rubocop:disable Metrics/MethodLength
+    def fetch_to_file(uri:, path: nil, limit: redirect_limit)
       make_request(uri, limit) do |success|
-        tempfile = Tempfile.new(['resync-client', ".#{extension_for(success)}"])
-        begin
-          open tempfile, 'w' do |out|
-            success.read_body { |chunk| out.write(chunk) }
-          end
-          return tempfile.path
-        ensure
-          tempfile.close
+        file = path ? File.new(path, 'w+') : Tempfile.new(['resync-client', ".#{extension_for(success)}"])
+        open file, 'w' do |out|
+          success.read_body { |chunk| out.write(chunk) }
         end
+        return file.path
       end
     end
 

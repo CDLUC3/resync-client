@@ -31,13 +31,21 @@ module Resync
     # Gets the content of the specified URI as a string.
     def get(uri)
       uri = Resync::XML.to_uri(uri)
-      @helper.fetch(uri)
+      @helper.fetch(uri: uri)
     end
 
     # Gets the content of the specified URI and saves it to a temporary file.
+    # @return the path to the downloaded file
     def download_to_temp_file(uri)
       uri = Resync::XML.to_uri(uri)
-      @helper.fetch_to_file(uri)
+      @helper.fetch_to_file(uri: uri)
+    end
+
+    # Gets the content of the specified URI and saves it to the specified file.
+    # @param path [String] the path to save the download to
+    def download_to_file(uri:, path:)
+      uri = Resync::XML.to_uri(uri)
+      @helper.fetch_to_file(path: path, uri: uri)
     end
 
   end

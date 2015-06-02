@@ -41,7 +41,10 @@ puts "    md5:         #{last_update.metadata.hash('md5')}"
 
 last_update_response = last_update.get
 puts last_update_response.class
-puts "    content:     #{last_update_response}"
+puts "    content:      #{last_update_response}"
 
 last_update_file = last_update.download_to_temp_file
-puts "    as file:     #{last_update_file}"
+last_update_file_contents = File.read(last_update_file)
+puts "    as file:      #{last_update_file}"
+puts "    file content: #{last_update_file_contents}"
+
