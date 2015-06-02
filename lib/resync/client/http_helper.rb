@@ -42,7 +42,10 @@ module Resync
     # ------------------------------------------------------------
     # Public methods
 
-    #
+    # Gets the content of the specified URI as a string.
+    # @param uri [URI] the URI to download
+    # @param limit [Integer] the number of redirects to follow (defaults to {#redirect_limit})
+    # @return [String] the content of the URI
     def fetch(uri:, limit: redirect_limit)
       make_request(uri, limit) do |success|
         # not 100% clear why we need an explicit return here; it
@@ -51,6 +54,11 @@ module Resync
       end
     end
 
+    # Gets the content of the specified URI and saves it to a file. If no
+    # file path is provided, saves it to a temporary file.
+    # @param uri [URI] the URI to download
+    # @param path [String] the path to save the download to (optional)
+    # @return [String] the path to the downloaded file
     def fetch_to_file(uri:, path: nil, limit: redirect_limit)
       make_request(uri, limit) do |success|
         file = path ? File.new(path, 'w+') : Tempfile.new(['resync-client', ".#{extension_for(success)}"])
