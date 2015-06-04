@@ -1,4 +1,5 @@
 require 'resync'
+require_relative 'extensions'
 require_relative 'downloadable'
 require_relative 'dump'
 
@@ -10,49 +11,40 @@ module Resync
 
   # Injects a {Client} that subclasses can use to fetch
   # resources and links
-  #
-  # @!attribute [rw] client
-  #   @return [Client] the injected {Client}. Defaults to
-  #     a new {Client} instance.
   class Augmented
-    attr_writer :client
-
-    def client
-      @client ||= Client.new
-    end
+    include Extensions::WithClient
 
     alias_method :base_links=, :links=
     private :base_links=
 
     # Adds a +:client+ method to each link, delegating
-    # to {#client}
+    # to {Extensions::WithClient#client}
     def links=(value)
       self.base_links = value
-      self.base_links = value
-      parent = self
       links.each do |l|
-        l.define_singleton_method(:client) do
-          parent.client
+        class << l
+          include Extensions::WithClientDelegate
         end
+        l.client_delegate = self
       end
     end
   end
 
   # Adds a +:client+ method to each resource, delegating
-  # to {Augmented#client}
+  # to {Extensions::WithClient#client}
   class BaseResourceList
     alias_method :base_resources=, :resources=
     private :base_resources=
 
     # Adds a +:client+ method to each resource, delegating
-    # to {Augmented#client}
+    # to {Extensions::WithClient#client}
     def resources=(value)
       self.base_resources = value
-      parent = self
       resources.each do |r|
-        r.define_singleton_method(:client) do
-          parent.client
+        class << r
+          include Extensions::WithClientDelegate
         end
+        r.client_delegate = self
       end
     end
   end
