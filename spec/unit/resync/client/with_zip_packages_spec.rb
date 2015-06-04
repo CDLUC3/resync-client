@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Resync
   module Extensions
-    describe Dump do
+    describe WithZipPackages do
       it 'transparently extracts bitstreams' do
         package_uri = URI('http://example.com/resourcedump.zip')
         client = instance_double(Client)

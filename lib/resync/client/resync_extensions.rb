@@ -63,13 +63,13 @@ module Resync
   # ------------------------------------------------------------
   # ResourceDump and ChaneDump
 
-  # Includes the {Dump} module
+  # Includes the {Extensions::WithZipPackages} module
   class ResourceDump
-    include Extensions::Dump
+    include Extensions::WithZipPackages
   end
 
-  # Includes the {Dump} module
+  # Includes the {Extensions::WithZipPackages} module
   class ChangeDump
-    include Extensions::Dump
+    include Extensions::WithZipPackages
   end
 end

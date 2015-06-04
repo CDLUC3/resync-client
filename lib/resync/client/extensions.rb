@@ -64,16 +64,10 @@ module Resync
       end
     end
 
-    module WithZipPackages
-      # A list (downloaded lazily) of the {ZipPackage}s for each resource
-      # @return [ZipPackages] the zip packages for each resource
-      def zip_packages
-        @zip_packages ||= ZipPackages.new(resources)
-      end
-    end
-
     module WithZipPackage
       include Downloadable
+
+      attr_writer :zip_package
 
       # Gets this {Downloadable} as a {ZipPackage}. The zip package
       # is downloaded only once.
@@ -84,8 +78,13 @@ module Resync
       end
     end
 
-    module Dump
-      include Extensions::WithZipPackages
+    module WithZipPackages
+
+      # A list (downloaded lazily) of the {ZipPackage}s for each resource
+      # @return [ZipPackages] the zip packages for each resource
+      def zip_packages
+        @zip_packages ||= ZipPackages.new(resources)
+      end
 
       # Injects a +:zip_package+ method into each resource,
       # downloading the (presumed) bitstream package to a
@@ -103,12 +102,6 @@ module Resync
           # end
         end
       end
-
-      # A list (downloaded lazily) of the {ZipPackage}s for each resource
-      # @return [ZipPackages] the zip packages for each resource
-      # def zip_packages
-      #   @zip_packages ||= ZipPackages.new(resources)
-      # end
     end
 
   end
