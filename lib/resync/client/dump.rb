@@ -10,7 +10,7 @@ module Resync
     def resources=(value)
       super
       resources.each do |r|
-        def r.zip_package
+        r.define_singleton_method(:zip_package) do
           @zip_package ||= ZipPackage.new(download_to_temp_file)
         end
       end
