@@ -1,7 +1,5 @@
 require 'resync'
 require_relative 'extensions'
-require_relative 'downloadable'
-require_relative 'dump'
 
 # Extensions to the core Resync classes to simplify retrieval
 module Resync
@@ -54,12 +52,12 @@ module Resync
 
   # Includes the {Downloadable} module
   class Resource
-    include Downloadable
+    include Extensions::Downloadable
   end
 
   # Includes the {Link} module
   class Link
-    include Downloadable
+    include Extensions::Downloadable
   end
 
   # ------------------------------------------------------------
@@ -67,11 +65,11 @@ module Resync
 
   # Includes the {Dump} module
   class ResourceDump
-    include Dump
+    include Extensions::Dump
   end
 
   # Includes the {Dump} module
   class ChangeDump
-    include Dump
+    include Extensions::Dump
   end
 end
