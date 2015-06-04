@@ -1,4 +1,4 @@
-require_relative 'zip_package'
+require_relative 'zip_packages'
 
 module Resync
   # Extends {ChangeDump} and {ResourceDump} to provide
@@ -16,10 +16,11 @@ module Resync
       end
     end
 
-    # A list of the {ZipPackage}s for each resource
-    # @return [Array<ZipPackage>] the zip packages for each resource
+    # A list (downloaded lazily) of the {ZipPackage}s for each resource
+    # @return [ZipPackages] the zip packages for each resource
     def zip_packages
-      resources.map(&:zip_package)
+      @zip_packages ||= ZipPackages.new(resources)
     end
   end
+
 end
