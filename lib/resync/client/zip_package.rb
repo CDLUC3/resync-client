@@ -14,6 +14,9 @@ module Resync
     # @return [Zip::File] the ZIP file wrapped by this package
     attr_reader :zipfile
 
+    # Gets the manifest for the ZIP package. Resources in the manifest
+    # are each decorated with a +bitstream+ method that returns the
+    # bitstream for that resource.
     # @return [ResourceDumpManifest, ChangeDumpManifest] the manifest
     #   for the ZIP package
     attr_reader :manifest
@@ -26,6 +29,7 @@ module Resync
     # @param zipfile [Zip::File, String] the ZIP file, or a path to it.
     def initialize(zipfile)
       self.zipfile = zipfile
+      @bitstreams = {}
     end
 
     # ------------------------------------------------------------
@@ -39,7 +43,7 @@ module Resync
     # @return [Bitstream] a bitstream wrapping the ZIP entry for the
     #   specified resource.
     def bitstream_for(resource)
-      Bitstream.new(zipfile: @zipfile, resource: resource)
+      @bitstreams[resource] ||= Bitstream.new(zipfile: @zipfile, resource: resource)
     end
 
     # Gets all bitstreams declared in the package manifest.
@@ -53,12 +57,22 @@ module Resync
 
     private
 
+    def manifest=(value)
+      @manifest = value
+      package = self
+      value.resources.each do |r|
+        r.define_singleton_method(:bitstream) do
+          package.bitstream_for(self)
+        end
+      end
+    end
+
     def zipfile=(value)
       zipfile = value.is_a?(Zip::File) ? value : Zip::File.open(value)
       manifest_entry = zipfile.find_entry('manifest.xml')
       fail "No manifest.xml found in zipfile #{zipfile.name}" unless manifest_entry
       manifest_stream = manifest_entry.get_input_stream
-      @manifest = XMLParser.parse(manifest_stream)
+      self.manifest = XMLParser.parse(manifest_stream)
       @zipfile = zipfile
     end
 

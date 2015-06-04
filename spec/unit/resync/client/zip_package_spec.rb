@@ -39,6 +39,18 @@ module Resync
         expect(bs1.size).to eq(447)
         expect(bs1.content).to eq(File.read('spec/data/resourcedump/resources/res2'))
       end
+
+      it 'provides direct access to bitstreams for each resource in the manifest' do
+        pkg = ZipPackage.new('spec/data/resourcedump/resourcedump.zip')
+        bitstreams = pkg.bitstreams
+
+        manifest = pkg.manifest
+        resources = manifest.resources
+
+        resources.each_with_index do |r, i|
+          expect(r.bitstream).to be(bitstreams[i])
+        end
+      end
     end
   end
 end
