@@ -36,6 +36,8 @@ spec/dummy/.sass-cache
 # Emacs
 
 *~
+.#*
+\#*
 
 # Mac OS
 
