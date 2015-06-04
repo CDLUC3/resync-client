@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 module Resync
+
   describe 'extensions' do
 
     # ------------------------------------------------------------
@@ -52,12 +53,6 @@ module Resync
         @links.each do |l|
           expect(l.client).to be(client2)
         end
-      end
-
-      it 'defaults to a new client' do
-        client = instance_double(Resync::Client)
-        expect(Resync::Client).to receive(:new) { client }
-        expect(@list.client).to be(client)
       end
     end
 

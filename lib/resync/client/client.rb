@@ -24,7 +24,7 @@ module Resync
       uri = Resync::XML.to_uri(uri)
       raw_contents = get(uri)
       doc = XMLParser.parse(raw_contents)
-      doc.client = self
+      doc.client_delegate = self
       doc
     end
 
@@ -52,6 +52,12 @@ module Resync
     def download_to_file(uri:, path:)
       uri = Resync::XML.to_uri(uri)
       @helper.fetch_to_file(path: path, uri: uri)
+    end
+
+    # Allows a {Client} to act as a {ClientDelegator} delegate.
+    # @return [Client] this client
+    def client
+      self
     end
 
   end

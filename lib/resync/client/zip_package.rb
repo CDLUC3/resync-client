@@ -59,21 +59,15 @@ module Resync
 
     def manifest=(value)
       @manifest = value
-      package = self
-      value.resources.each do |r|
-        r.define_singleton_method(:bitstream) do
-          package.bitstream_for(self)
-        end
-      end
+      manifest.zip_package = self
     end
 
     def zipfile=(value)
-      zipfile = value.is_a?(Zip::File) ? value : Zip::File.open(value)
+      @zipfile = value.is_a?(Zip::File) ? value : Zip::File.open(value)
       manifest_entry = zipfile.find_entry('manifest.xml')
       fail "No manifest.xml found in zipfile #{zipfile.name}" unless manifest_entry
       manifest_stream = manifest_entry.get_input_stream
       self.manifest = XMLParser.parse(manifest_stream)
-      @zipfile = zipfile
     end
 
   end
