@@ -143,5 +143,11 @@ module Resync
       end
     end
 
+    describe 'example.rb' do
+      it 'works' do
+        fail 'figure out why example.rb isn\'t working'
+      end
+
+    end
   end
 end
