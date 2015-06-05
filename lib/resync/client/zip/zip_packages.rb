@@ -1,5 +1,5 @@
 require 'resync'
-require 'resync/extensions'
+require_relative '../../extensions'
 require_relative 'zip_package'
 
 module Resync

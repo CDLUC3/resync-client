@@ -1,4 +1,4 @@
-require 'resync/client/zip'
+require_relative '../zip'
 
 # A resource that refers to a bitsream within a zipped bitstream package.
 #

@@ -1,4 +1,4 @@
-require 'resync/client/zip'
+require_relative '../zip'
 require_relative 'bitstream_resource'
 
 # A list of resources within a single zipped bitstream package, e.g. as provided

@@ -1,4 +1,4 @@
-require 'resync/client'
+require_relative '../../client'
 
 # An object that delegates to another to provide a {Client} for downloading
 # resources and links.
