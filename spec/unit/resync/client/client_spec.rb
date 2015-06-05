@@ -95,6 +95,23 @@ module Resync
         doc = @client.get_and_parse(uri)
         expect(doc.client).to be(@client)
       end
+
+      it 'injects the client recursively' do
+        uri = URI('http://example.org/resource-list-index.xml')
+        data = File.read('spec/data/examples/resource-list-index.xml')
+        resource_list_xml = File.read('spec/data/examples/resource-list.xml')
+        expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
+        doc = @client.get_and_parse(uri)
+        doc.resources.each do |r|
+          expect(r.client).to be(@client)
+          expect(@helper).to receive(:fetch).with(uri: r.uri).and_return(resource_list_xml)
+          resource_doc = r.get_and_parse
+          expect(resource_doc.client).to be(@client)
+          resource_doc.resources.each do |r2|
+            expect(r2.client).to be(@client)
+          end
+        end
+      end
     end
 
     describe '#new' do
