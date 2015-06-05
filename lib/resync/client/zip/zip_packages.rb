@@ -47,7 +47,7 @@ module Resync
 
         # Lazily iterates the given block for each zip package, downloading
         # as necessary.
-        # @param &block [Block] The block to iterate
+        # @yield [ZipPackage] the zip package for each resource
         def each
           @resources.lazy.each do |resource|
             yield package_for(resource)

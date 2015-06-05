@@ -56,7 +56,7 @@ module Resync
       @helper.fetch_to_file(path: path, uri: uri)
     end
 
-    # Allows a {Client} to act as a {ClientDelegator} delegate.
+    # Allows a {Client} to act as a {Mixins::ClientDelegator} delegate.
     # @return [Client] this client
     def client
       self

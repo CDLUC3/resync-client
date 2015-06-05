@@ -8,9 +8,9 @@ module Resync
       module ZippedResource
         prepend Downloadable
 
-        # Provides the contents of this resource as a {ZipPackage}, downloading
+        # Provides the contents of this resource as a {Resync::Client::Zip::ZipPackage}, downloading
         # it to a temporary file if necessary.
-        # @return [ZipPackage] the zipped contents of this resource
+        # @return [Resync::Client::Zip::ZipPackage] the zipped contents of this resource
         def zip_package
           @zip_package ||= Resync::Client::Zip::ZipPackage.new(download_to_temp_file)
         end

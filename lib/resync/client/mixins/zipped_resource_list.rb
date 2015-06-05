@@ -15,8 +15,8 @@ module Resync
           end
         end
 
-        # A list (downloaded lazily) of the {ZipPackage}s for each resource
-        # @return [ZipPackages] the zip packages for each resource
+        # A list (downloaded lazily) of the {Resync::Client::Zip::ZipPackage}s for each resource
+        # @return [Resync::Client::Zip::ZipPackages] the zip packages for each resource
         def zip_packages
           @zip_packages ||= Resync::Client::Zip::ZipPackages.new(resources)
         end
