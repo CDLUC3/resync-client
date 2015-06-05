@@ -7,13 +7,17 @@ module Resync
       @client = Client.new(helper: @helper)
     end
 
-    describe '#get' do
+    describe '#get_and_parse' do
       it 'retrieves a CapabilityList' do
         uri = URI('http://example.org/capability-list.xml')
         data = File.read('spec/data/examples/capability-list.xml')
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::CapabilityList)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'retrieves a ChangeDump' do
@@ -22,6 +26,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeDump)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'retrieves a ChangeDumpManifest' do
@@ -30,6 +38,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeDumpManifest)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'retrieves a ChangeList' do
@@ -38,6 +50,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeList)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'retrieves a ResourceDump' do
@@ -46,6 +62,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceDump)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'retrieves a ResourceDumpManifest' do
@@ -54,6 +74,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceDumpManifest)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'retrieves a ResourceList' do
@@ -62,6 +86,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceList)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'retrieves a SourceDescription' do
@@ -70,6 +98,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::SourceDescription)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'retrieves a ChangeListIndex' do
@@ -78,6 +110,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ChangeListIndex)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'retrieves a ResourceListIndex' do
@@ -86,6 +122,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc).to be_a(Resync::ResourceListIndex)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'injects the client into the returned document' do
@@ -94,6 +134,10 @@ module Resync
         expect(@helper).to receive(:fetch).with(uri: uri).and_return(data)
         doc = @client.get_and_parse(uri)
         expect(doc.client).to be(@client)
+        doc.resources.each do |r|
+          expect(r.client_delegate).to be(doc)
+          expect(r.client).to be(@client)
+        end
       end
 
       it 'injects the client recursively' do
@@ -143,11 +187,5 @@ module Resync
       end
     end
 
-    describe 'example.rb' do
-      it 'works' do
-        fail 'figure out why example.rb isn\'t working'
-      end
-
-    end
   end
 end

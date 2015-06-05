@@ -1,3 +1,8 @@
+# 0.2.1
+
+- Update to depend on [resync](https://github.com/dmolesUC3/resync) 0.1.3
+- Add more tests for client delegation
+
 # 0.2.0
 
 - Use named mixins instead of instance monkey-patching for easier documentation and navigation.
