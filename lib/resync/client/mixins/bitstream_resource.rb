@@ -4,7 +4,7 @@ require 'resync/client/zip'
 #
 # @!attribute [rw] zip_package_delegate
 #   @return [ZipPackage] the provider of the containing package,
-#   e.g. its manifest
+#     e.g. its manifest
 module Resync
   class Client
     module Mixins
