@@ -1,3 +1,8 @@
+# 0.2.2
+
+- Replaced `Bistream#stream` with `Bitstream#get_input_stream`, which (unlike the former) returns a new stream with each invocation.
+- Update to depend on [resync](https://github.com/dmolesUC3/resync) 0.2.1
+
 # 0.2.1
 
 - Update to depend on [resync](https://github.com/dmolesUC3/resync) 0.1.3

@@ -39,16 +39,17 @@ module Resync
           @size ||= @zip_entry.size
         end
 
-        # The bitstream, as an +IO+-like object. Subsequent
-        # calls will return the same stream.
-        def stream
-          @stream ||= @zip_entry.get_input_stream
+        # The bitstream, as an +IO+-like object. Each call
+        # to this method will return a new stream.
+        # @return [::Zip::InputStream] the bitstream.
+        def get_input_stream # rubocop:disable Style/AccessorMethodName
+          @zip_entry.get_input_stream
         end
 
         # The content of the bitstream. The content will be
         # read only once.
         def content
-          @content ||= stream.read
+          @content ||= get_input_stream.read
         end
 
         # The content type of the bitstream, as per {#metadata}.

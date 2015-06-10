@@ -51,7 +51,7 @@ module Resync
         # Gets all bitstreams declared in the package manifest.
         # @return [Array<Bitstream>] a list of all bitstreams in the package
         def bitstreams
-          manifest.resources.map { |r| bitstream_for(r) }
+          manifest.resources.to_a.map { |r| bitstream_for(r) }
         end
 
         # ------------------------------------------------------------

@@ -46,18 +46,19 @@ module Resync
           end
         end
 
-        describe '#stream' do
+        describe '#get_input_stream' do
           it 'returns the input stream from the zip entry' do
             stream = instance_double(::Zip::InputStream)
             expect(@zip_entry).to receive(:get_input_stream).and_return(stream)
-            expect(@bitstream.stream).to be(stream)
+            expect(@bitstream.get_input_stream).to be(stream)
           end
 
-          it 'returns the same stream each time' do
-            stream = instance_double(::Zip::InputStream)
-            expect(@zip_entry).to receive(:get_input_stream).and_return(stream)
-            expect(@bitstream.stream).to be(stream)
-            expect(@bitstream.stream).to be(stream)
+          it 'returns a different stream each time' do
+            stream1 = instance_double(::Zip::InputStream)
+            stream2 = instance_double(::Zip::InputStream)
+            expect(@zip_entry).to receive(:get_input_stream).twice.and_return(stream1, stream2)
+            expect(@bitstream.get_input_stream).to be(stream1)
+            expect(@bitstream.get_input_stream).to be(stream2)
           end
         end
 
