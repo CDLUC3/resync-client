@@ -1,60 +1,94 @@
 require 'spec_helper'
 
 module Resync
-  class Client
-    module Mixins
-      describe Dump do
-        it "works for #{ResourceDump}" do
-          path = 'spec/data/resourcedump/resourcedump.xml'
-          package_uri = URI('http://example.com/resourcedump.zip')
+  describe ResourceDump do
+    describe '#zip_packages' do
+      it 'transparently exposes bitstreams' do
+        path = 'spec/data/resourcedump/resourcedump.xml'
+        package_uri = URI('http://example.com/resourcedump.zip')
 
-          client = instance_double(Client)
-          expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
+        client = instance_double(Client)
+        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
 
-          dump = XMLParser.parse(File.read(path))
-          dump.client = client
+        dump = XMLParser.parse(File.read(path))
+        dump.client = client
 
-          zip_packages = dump.zip_packages
-          expect(zip_packages.size).to eq(1)
+        zip_packages = dump.zip_packages
+        expect(zip_packages.size).to eq(1)
+        expect(zip_packages[0]).to be_a(Client::Zip::ZipPackage)
 
-          zip_package = zip_packages[0]
-          expect(zip_package).to be_a(Resync::Client::Zip::ZipPackage)
+        bitstreams = zip_packages[0].bitstreams
+        expect(bitstreams.size).to eq(2)
+        expect(bitstreams[0].content).to eq(File.read('spec/data/resourcedump/resources/res1'))
+        expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
+      end
+    end
 
-          bitstreams = zip_package.bitstreams
-          expect(bitstreams.size).to eq(2)
+    describe '#all_zip_packages' do
+      it 'is an alias for #zip_packages' do
+        path = 'spec/data/resourcedump/resourcedump.xml'
+        package_uri = URI('http://example.com/resourcedump.zip')
 
-          stream1 = bitstreams[0]
-          expect(stream1.content).to eq(File.read('spec/data/resourcedump/resources/res1'))
+        client = instance_double(Client)
+        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
 
-          stream2 = bitstreams[1]
-          expect(stream2.content).to eq(File.read('spec/data/resourcedump/resources/res2'))
-        end
+        dump = XMLParser.parse(File.read(path))
+        dump.client = client
 
-        it "works for #{ChangeDump}" do
-          path = 'spec/data/resourcedump/changedump.xml'
-          package_uri = URI('http://example.com/changedump.zip')
+        all_zip_packages = dump.all_zip_packages
+        expect(all_zip_packages.size).to eq(1)
+        expect(all_zip_packages[0]).to be_a(Client::Zip::ZipPackage)
 
-          client = instance_double(Client)
-          expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
+        bitstreams = all_zip_packages[0].bitstreams
+        expect(bitstreams.size).to eq(2)
+        expect(bitstreams[0].content).to eq(File.read('spec/data/resourcedump/resources/res1'))
+        expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
+      end
+    end
+  end
 
-          dump = XMLParser.parse(File.read(path))
-          dump.client = client
+  describe ChangeDump do
+    describe '#zip_packages' do
+      it 'transparently exposes bitstreams' do
+        path = 'spec/data/resourcedump/changedump.xml'
+        package_uri = URI('http://example.com/changedump.zip')
 
-          zip_packages = dump.zip_packages
-          expect(zip_packages.size).to eq(1)
+        client = instance_double(Client)
+        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
 
-          zip_package = zip_packages[0]
-          expect(zip_package).to be_a(Resync::Client::Zip::ZipPackage)
+        dump = XMLParser.parse(File.read(path))
+        dump.client = client
 
-          bitstreams = zip_package.bitstreams
-          expect(bitstreams.size).to eq(2)
+        zip_packages = dump.zip_packages
+        expect(zip_packages.size).to eq(1)
+        expect(zip_packages[0]).to be_a(Client::Zip::ZipPackage)
 
-          stream1 = bitstreams[0]
-          expect(stream1.content).to eq(File.read('spec/data/resourcedump/resources/res1'))
+        bitstreams = zip_packages[0].bitstreams
+        expect(bitstreams.size).to eq(2)
+        expect(bitstreams[0].content).to eq(File.read('spec/data/resourcedump/resources/res1'))
+        expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
+      end
+    end
 
-          stream2 = bitstreams[1]
-          expect(stream2.content).to eq(File.read('spec/data/resourcedump/resources/res2'))
-        end
+    describe '#all_zip_packages' do
+      it 'is an alias for #zip_packages' do
+        path = 'spec/data/resourcedump/changedump.xml'
+        package_uri = URI('http://example.com/changedump.zip')
+
+        client = instance_double(Client)
+        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
+
+        dump = XMLParser.parse(File.read(path))
+        dump.client = client
+
+        zip_packages = dump.all_zip_packages
+        expect(zip_packages.size).to eq(1)
+        expect(zip_packages[0]).to be_a(Client::Zip::ZipPackage)
+
+        bitstreams = zip_packages[0].bitstreams
+        expect(bitstreams.size).to eq(2)
+        expect(bitstreams[0].content).to eq(File.read('spec/data/resourcedump/resources/res1'))
+        expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
       end
     end
   end

@@ -27,7 +27,19 @@ module Resync
     prepend Client::Mixins::ListIndex
   end
 
+  class ChangeList
+    # Aliases +:resources+ as +:all_resources+ for transparent
+    # interoperability with +ChangeListIndex+
+    alias_method :all_changes, :changes
+  end
+
   class ResourceListIndex
     prepend Client::Mixins::ListIndex
+  end
+
+  class ResourceList
+    # Aliases +:resources+ as +:all_resources+ for transparent
+    # interoperability with +ResourceListIndex+
+    alias_method :all_resources, :resources
   end
 end

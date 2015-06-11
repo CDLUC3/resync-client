@@ -22,6 +22,13 @@ module Resync
         def zip_packages
           @zip_packages ||= Resync::Client::Zip::ZipPackages.new(resources)
         end
+
+        # Aliases +:zip_packages+ as +:all_zip_packages+ for transparent
+        # interoperability between +ResourceDump+ and +ResourceDumpIndex+,
+        # +ChangeDump+ and +ChangeDumpIndex+
+        def self.prepended(ext)
+          ext.send(:alias_method, :all_zip_packages, :zip_packages)
+        end
       end
     end
   end

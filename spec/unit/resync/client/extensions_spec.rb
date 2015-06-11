@@ -41,6 +41,40 @@ module Resync
       end
     end
 
+    describe ResourceList do
+      describe '#all_resources' do
+        it 'is an alias for #resources' do
+          resources = Array.new(3) do
+            resource = instance_double(Resource)
+            allow(resource).to receive(:client_delegate=)
+            resource
+          end
+          all_resources = ResourceList.new(resources: resources).all_resources
+          expect(all_resources).to be_a(Util::IndexableLazy)
+          expect(all_resources.to_a).to eq(resources)
+        end
+      end
+    end
+
+    describe ChangeList do
+      describe '#all_changes' do
+        it 'is a proxy for #changes' do
+          resources = []
+          resources[0] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(1999, 1, 1), metadata: Metadata.new(change: Types::Change::CREATED))
+          resources[1] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 1, 1), metadata: Metadata.new(change: Types::Change::CREATED))
+          resources[2] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(1999, 3, 1), metadata: Metadata.new(change: Types::Change::UPDATED))
+          resources[3] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(1999, 6, 1), metadata: Metadata.new(change: Types::Change::UPDATED))
+          resources[4] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 3, 1), metadata: Metadata.new(change: Types::Change::UPDATED))
+          resources[5] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 6, 1), metadata: Metadata.new(change: Types::Change::UPDATED))
+          resources[6] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(1999, 9, 1), metadata: Metadata.new(change: Types::Change::DELETED))
+          resources[7] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 9, 1), metadata: Metadata.new(change: Types::Change::DELETED))
+          list = ChangeList.new(resources: resources)
+          all_changes = list.all_changes(of_type: Types::Change::UPDATED, in_range: Time.utc(1999, 4, 1)..Time.utc(2000, 4, 1))
+          expect(all_changes.to_a).to eq([resources[3], resources[4]])
+        end
+      end
+    end
+
     describe BaseChangeIndex do
       before(:each) do
         @helper = instance_double(Client::HTTPHelper)
