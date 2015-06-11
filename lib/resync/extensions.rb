@@ -46,6 +46,14 @@ module Resync
     prepend Client::Mixins::ListOfResourceLists
   end
 
+  class ChangeDumpIndex
+    prepend Client::Mixins::ListOfZippedResourceLists
+  end
+
+  class ResourceDumpIndex
+    prepend Client::Mixins::ListOfZippedResourceLists
+  end
+
   class SourceDescription
     prepend Client::Mixins::ListOfResourceLists
   end

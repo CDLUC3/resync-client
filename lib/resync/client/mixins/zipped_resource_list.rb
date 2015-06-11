@@ -9,6 +9,7 @@ module Resync
         def resources=(value)
           super
           resources.each do |r|
+            next if r.respond_to?(:zip_package)
             class << r
               prepend ZippedResource
             end

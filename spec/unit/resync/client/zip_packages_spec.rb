@@ -29,6 +29,30 @@ module Resync
           expect(zip_packages[1]).to be(zip_package)
         end
 
+        it 'flatmaps' do
+          resources = Array.new(6) { |i| Resource.new(uri: "http://example.org/res#{i}") }
+          all_packages = Array.new(6) do |i|
+            zip_package = instance_double(ZipPackage)
+            expect(resources[i]).to receive(:zip_package).once.and_return(zip_package)
+            zip_package
+          end
+
+          zip_packages_1 = ZipPackages.new(resources[0, 3])
+          zip_packages_2 = ZipPackages.new(resources[3, 3])
+
+          zrl1 = instance_double(Resync::Client::Mixins::ZippedResourceList)
+          expect(zrl1).to receive(:zip_packages).twice.and_return(zip_packages_1)
+
+          zrl2 = instance_double(Resync::Client::Mixins::ZippedResourceList)
+          expect(zrl2).to receive(:zip_packages).twice.and_return(zip_packages_2)
+
+          flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)
+          expect(flat_mapped).to eq(all_packages)
+
+          lazy_flat_mapped = [zrl1, zrl2].lazy.flat_map(&:zip_packages).to_a
+          expect(lazy_flat_mapped).to eq(all_packages)
+        end
+
         it 'supports lazy iteration' do
           manifests = Array.new(3) { instance_double(ChangeDumpManifest) }
           all_packages = Array.new(3) do |index|

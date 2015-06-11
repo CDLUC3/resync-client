@@ -17,8 +17,10 @@ module Resync
         def resources=(value)
           super
           resources.each do |r|
-            class << r
-              prepend BitstreamResource
+            unless r.respond_to?(:bitstream) && r.respond_to?(:containing_package)
+              class << r
+                prepend BitstreamResource
+              end
             end
             r.zip_package_delegate = self
           end

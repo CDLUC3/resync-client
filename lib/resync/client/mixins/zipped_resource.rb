@@ -12,6 +12,7 @@ module Resync
         # it to a temporary file if necessary.
         # @return [Resync::Client::Zip::ZipPackage] the zipped contents of this resource
         def zip_package
+          puts self
           @zip_package ||= Resync::Client::Zip::ZipPackage.new(download_to_temp_file)
         end
       end

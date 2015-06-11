@@ -1,6 +1,7 @@
 # 0.2.4
 
-- Added `#all_resources` to transparently download and flatten lists of lists, such as `ChangeListIndex` and `ResourceListIndex` 
+- Added `#all_resources` to transparently download and flatten lists in `ChangeListIndex` and `ResourceListIndex`
+- Added `#all_zip_packages` to transparently download and flatten dumps in `ChangeDumpIndex` and `ResourceDumpIndex`
 - Fix issue where documentation on mixin modules was mistakenly applied to the `Resync` module
 
 # 0.2.3

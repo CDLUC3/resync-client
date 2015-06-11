@@ -10,7 +10,7 @@ module Resync
         # Downloads and parses each resource list and returns a flattened enumeration
         # of all resources in each contained list. Each contained list is only downloaded
         # as needed, and only downloaded once.
-        # @return [Enumerator::Lazy<Resource>] the flattened enumeration of resources
+        # @return [Enumerator::Lazy<Resync::Resource>] the flattened enumeration of resources
         def all_resources
           @resource_lists ||= {}
           resources.flat_map do |r|
@@ -22,7 +22,4 @@ module Resync
       end
     end
   end
-end
-
-module Resync
 end

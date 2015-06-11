@@ -71,7 +71,7 @@ module Resync
             cap_list.all_resources
           end
 
-          it 'is lazy enough not to download resources it doesn \'t need' do
+          it 'is lazy enough not to download resources it doesn\'t need' do
             cap_list_uri = URI('http://example.com/capabilitylist.xml')
             cap_list_data = File.read('spec/data/examples/capability-list.xml')
             expect(@helper).to receive(:fetch).with(uri: cap_list_uri).and_return(cap_list_data)

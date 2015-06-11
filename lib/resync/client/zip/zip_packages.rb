@@ -53,6 +53,16 @@ module Resync
             yield package_for(resource)
           end
         end
+
+        # Eagerly gets the zip package for each resource, downloading
+        # as necessary. (For compatbility with {::Enumerator::Lazy#flat_map})
+        # @return [Array<ZipPackage>] the zip package for each resource
+        def force
+          @resources.map { |r| package_for(r) }.to_a
+        end
+
+        # Alias for {#force} (for compatbility with {::Enumerable#flat_map})
+        alias_method :to_ary, :force
       end
     end
   end
