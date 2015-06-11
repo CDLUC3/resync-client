@@ -30,7 +30,7 @@ module Resync
   class ChangeList
     # Aliases +:resources+ as +:all_resources+ for transparent
     # interoperability with +ChangeListIndex+
-    alias_method :all_changes, :changes
+    alias_method :all_resources, :resources
   end
 
   class ResourceListIndex

@@ -1,3 +1,10 @@
+# 0.2.6
+
+- Added `#all_resources` (as alias for `#resources`) to `ChangeList`/`ResourceList` for transparent interoperability with `ChangeListIndex`/`ResourceListIndex`
+- Added `#all_changes` (as alias for `#changes`) to `ChangeList`/`ChangeDump` for transparent interoperability with `ChangeListIndex`/`ChangeDumpIndex`
+<!-- TODO: figure out what ChangeDump#all_changes should really do -->
+- Added `#all_zip_packages` (as alias for `#zip_packages`) to `ChangeDump`/`ResourceDump` for transparent interoperability with `ChangeDumpIndex`/`ResourceDumpIndex`
+
 # 0.2.5
 
 - Added `#all_changes` to transparently download and flatten changes in `ChangeListIndex` and `ChangeDumpIndex` documents, with filtering by time and type

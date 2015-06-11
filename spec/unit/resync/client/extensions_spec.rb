@@ -58,6 +58,19 @@ module Resync
 
     describe ChangeList do
       describe '#all_changes' do
+        describe '#all_resources' do
+          it 'is an alias for #resources' do
+            resources = []
+            resources[0] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(1999, 1, 1))
+            resources[1] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 1, 1))
+            resources[2] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2001, 3, 1))
+
+            all_resources = ResourceList.new(resources: resources).all_resources
+            expect(all_resources).to be_a(Util::IndexableLazy)
+            expect(all_resources.to_a).to eq(resources)
+          end
+        end
+
         it 'is a proxy for #changes' do
           resources = []
           resources[0] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(1999, 1, 1), metadata: Metadata.new(change: Types::Change::CREATED))

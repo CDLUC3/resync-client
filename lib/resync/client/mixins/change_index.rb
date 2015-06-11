@@ -34,4 +34,17 @@ module Resync
   class BaseChangeIndex
     prepend Client::Mixins::ChangeIndex
   end
+
+  class ChangeList
+    # Aliases +:changes+ as +:all_changes+ for transparent
+    # interoperability with +ChangeListIndex+
+    alias_method :all_changes, :changes
+  end
+
+  # TODO: figure out whether we need this / what it would mean
+  # class ChangeDump
+  #   # Aliases +:changes+ as +:all_changes+ for transparent
+  #   # interoperability with +ChangeDumpIndex+
+  #   alias_method :all_changes, :changes
+  # end
 end
