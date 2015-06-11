@@ -1,3 +1,7 @@
+# 0.2.4
+
+- Fix issue where documentation on mixin modules was mistakenly applied to the `Resync` module
+
 # 0.2.3
 
 - Update to depend on [resync](https://github.com/dmolesUC3/resync) 0.2.2

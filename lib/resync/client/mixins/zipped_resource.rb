@@ -1,10 +1,10 @@
 require_relative '../zip'
 require_relative 'downloadable'
 
-# A resource that refers to a zipped bitstream package.
 module Resync
   class Client
     module Mixins
+      # A resource that refers to a zipped bitstream package.
       module ZippedResource
         prepend Downloadable
 

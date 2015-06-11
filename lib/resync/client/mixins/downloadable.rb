@@ -1,9 +1,9 @@
 require_relative 'client_delegator'
 
-# A downloadable resource or link.
 module Resync
   class Client
     module Mixins
+      # A downloadable resource or link.
       module Downloadable
         prepend ClientDelegator
 

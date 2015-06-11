@@ -1,10 +1,10 @@
 require_relative '../zip'
 require_relative 'zipped_resource'
 
-# A list of resources each of which refers to a zipped bitstream package.
 module Resync
   class Client
     module Mixins
+      # A list of resources each of which refers to a zipped bitstream package.
       module ZippedResourceList
         def resources=(value)
           super

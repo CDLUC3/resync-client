@@ -1,13 +1,13 @@
 require_relative '../../client'
 
-# An object that delegates to another to provide a {Client} for downloading
-# resources and links.
-#
-# @!attribute [rw] client_delegate
-#   @return [#client] The client provider.
 module Resync
   class Client
     module Mixins
+      # An object that delegates to another to provide a {Client} for downloading
+      # resources and links.
+      #
+      # @!attribute [rw] client_delegate
+      #   @return [#client] The client provider.
       module ClientDelegator
         attr_accessor :client_delegate
 

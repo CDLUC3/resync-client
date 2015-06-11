@@ -1,14 +1,14 @@
 require_relative '../zip'
 require_relative 'bitstream_resource'
 
-# A list of resources within a single zipped bitstream package, e.g. as provided
-# by the package manifest.
-#
-# @!attribute [rw] zip_package
-#   @return [ZipPackage] the package.
 module Resync
   class Client
     module Mixins
+      # A list of resources within a single zipped bitstream package, e.g. as provided
+      # by the package manifest.
+      #
+      # @!attribute [rw] zip_package
+      #   @return [ZipPackage] the package.
       module BitstreamResourceList
         attr_accessor :zip_package
 

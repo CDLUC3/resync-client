@@ -1,9 +1,9 @@
 require_relative 'client_delegator'
 
-# A resource container that is capable of providing those resources with a {Client}
 module Resync
   class Client
     module Mixins
+     # A resource container that is capable of providing those resources with a {Client}
       module ResourceClientDelegate
         prepend ClientDelegator
 
