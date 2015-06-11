@@ -1,3 +1,7 @@
+# 0.2.5
+
+- Added `#all_changes` to transparently download and flatten changes in `ChangeListIndex` and `ChangeDumpIndex` documents, with filtering by time and type
+
 # 0.2.4
 
 - Added `#all_resources` to transparently download and flatten lists in `ChangeListIndex` and `ResourceListIndex`
