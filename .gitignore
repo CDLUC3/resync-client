@@ -15,15 +15,9 @@
 *.a
 mkmf.log
 
-# Rails engine
+# gem build
 
-.bundle/
-log/*.log
-spec/dummy/db/*.sqlite3
-spec/dummy/db/*.sqlite3-journal
-spec/dummy/log/*.log
-spec/dummy/tmp/
-spec/dummy/.sass-cache
+*.gem
 
 # IntellJ
 

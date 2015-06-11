@@ -1,9 +1,10 @@
+require 'resync'
 require_relative 'client_delegator'
 
-# A downloadable resource or link.
 module Resync
   class Client
     module Mixins
+      # A downloadable resource or link.
       module Downloadable
         prepend ClientDelegator
 
@@ -32,5 +33,13 @@ module Resync
         end
       end
     end
+  end
+
+  class Link
+    prepend Client::Mixins::Downloadable
+  end
+
+  class Resource
+    prepend Client::Mixins::Downloadable
   end
 end

@@ -1,14 +1,16 @@
+require 'resync'
 require_relative '../zip'
 require_relative 'zipped_resource'
 
-# A list of resources each of which refers to a zipped bitstream package.
 module Resync
   class Client
     module Mixins
-      module ZippedResourceList
+      # A list of resources each of which refers to a zipped bitstream package.
+      module Dump
         def resources=(value)
           super
           resources.each do |r|
+            next if r.respond_to?(:zip_package)
             class << r
               prepend ZippedResource
             end
@@ -22,5 +24,13 @@ module Resync
         end
       end
     end
+  end
+
+  class ResourceDump
+    prepend Client::Mixins::Dump
+  end
+
+  class ChangeDump
+    prepend Client::Mixins::Dump
   end
 end

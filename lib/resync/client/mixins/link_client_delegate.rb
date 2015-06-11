@@ -1,9 +1,10 @@
+require 'resync'
 require_relative 'client_delegator'
 
-# A link container that is capable of providing those resources with a {Client}
 module Resync
   class Client
     module Mixins
+      # A link container that is capable of providing those resources with a {Client}
       module LinkClientDelegate
         prepend ClientDelegator
 
@@ -15,5 +16,9 @@ module Resync
         end
       end
     end
+  end
+
+  class Augmented
+    prepend Client::Mixins::LinkClientDelegate
   end
 end

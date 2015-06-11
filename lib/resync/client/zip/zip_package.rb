@@ -1,6 +1,6 @@
 require 'zip'
 require 'resync'
-require_relative '../../extensions'
+require_relative '../mixins'
 require_relative 'bitstream'
 
 module Resync
