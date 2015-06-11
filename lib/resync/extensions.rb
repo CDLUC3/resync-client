@@ -33,4 +33,20 @@ module Resync
   class ChangeDumpManifest
     prepend Client::Mixins::BitstreamResourceList
   end
+
+  class CapabilityList
+    prepend Client::Mixins::ListOfResourceLists
+  end
+
+  class ChangeListIndex
+    prepend Client::Mixins::ListOfResourceLists
+  end
+
+  class ResourceListIndex
+    prepend Client::Mixins::ListOfResourceLists
+  end
+
+  class SourceDescription
+    prepend Client::Mixins::ListOfResourceLists
+  end
 end

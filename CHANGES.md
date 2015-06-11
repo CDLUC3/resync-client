@@ -1,5 +1,6 @@
 # 0.2.4
 
+- Added `#all_resources` to transparently download and flatten lists of lists, such as `ChangeListIndex` and `ResourceListIndex` 
 - Fix issue where documentation on mixin modules was mistakenly applied to the `Resync` module
 
 # 0.2.3
