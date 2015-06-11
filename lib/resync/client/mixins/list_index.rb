@@ -30,15 +30,4 @@ module Resync
   class ResourceListIndex
     prepend Client::Mixins::ListIndex
   end
-
-  class BaseChangeIndex
-    def all_changes(of_type: nil, in_range: nil)
-      @change_lists ||= {}
-      lists = in_range ? change_lists(in_range: in_range) : resources
-      lists.flat_map do |cl|
-        @change_lists[cl] ||= cl.get_and_parse
-        @change_lists[cl].changes(of_type: of_type, in_range: in_range)
-      end
-    end
-  end
 end

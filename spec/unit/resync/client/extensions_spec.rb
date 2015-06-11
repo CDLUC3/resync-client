@@ -9,16 +9,16 @@ module Resync
 
     before(:each) do
       @resources = [
-          Resource.new(uri: 'http://example.com/dataset1/resourcelist.xml', metadata: Metadata.new(capability: 'resourcelist')),
-          Resource.new(uri: 'http://example.com/dataset1/resourcedump.xml', metadata: Metadata.new(capability: 'resourcedump')),
-          Resource.new(uri: 'http://example.com/dataset1/changelist.xml', metadata: Metadata.new(capability: 'changelist')),
-          Resource.new(uri: 'http://example.com/dataset1/changedump.xml', metadata: Metadata.new(capability: 'changedump'))
+        Resource.new(uri: 'http://example.com/dataset1/resourcelist.xml', metadata: Metadata.new(capability: 'resourcelist')),
+        Resource.new(uri: 'http://example.com/dataset1/resourcedump.xml', metadata: Metadata.new(capability: 'resourcedump')),
+        Resource.new(uri: 'http://example.com/dataset1/changelist.xml', metadata: Metadata.new(capability: 'changelist')),
+        Resource.new(uri: 'http://example.com/dataset1/changedump.xml', metadata: Metadata.new(capability: 'changedump'))
       ]
       @links = [
-          Link.new(rel: 'describedby', uri: 'http://example.org/desc1'),
-          Link.new(rel: 'duplicate', uri: 'http://example.com/dup1'),
-          Link.new(rel: 'describedby', uri: 'http://example.org/desc2'),
-          Link.new(rel: 'duplicate', uri: 'http://example.com/dup2')
+        Link.new(rel: 'describedby', uri: 'http://example.org/desc1'),
+        Link.new(rel: 'duplicate', uri: 'http://example.com/dup1'),
+        Link.new(rel: 'describedby', uri: 'http://example.org/desc2'),
+        Link.new(rel: 'duplicate', uri: 'http://example.com/dup2')
       ]
       @list = ResourceList.new(resources: @resources, links: @links)
     end
@@ -66,24 +66,24 @@ module Resync
           expect(@helper).to receive(:fetch).with(uri: list3_uri).and_return(list3_data)
 
           expected_mtimes = [
-              Time.utc(2013, 1, 1, 1),
-              Time.utc(2013, 1, 1, 23),
-              Time.utc(2013, 1, 2, 1),
-              Time.utc(2013, 1, 2, 23),
-              Time.utc(2013, 1, 3, 1)
+            Time.utc(2013, 1, 1, 1),
+            Time.utc(2013, 1, 1, 23),
+            Time.utc(2013, 1, 2, 1),
+            Time.utc(2013, 1, 2, 23),
+            Time.utc(2013, 1, 3, 1)
           ]
 
           change_index = @client.get_and_parse(change_index_uri)
           index = 0
           change_index.all_changes(in_range: (Time.utc(0)..Time.new)).each do |c|
-            res = index % 2 == 0 ? 1 : 2
+            res = index.even? ? 1 : 2
             expect(c.uri).to eq(URI("http://example.com/res#{res}"))
             expect(c.modified_time).to be_time(expected_mtimes[index])
             index += 1
           end
           expect(index).to eq(5)
         end
-        
+
         it 'doesn\'t download unnecessary changelists' do
           change_index_uri = URI('http://example.com/dataset1/changelist.xml')
           change_index_data = File.read('spec/data/examples/change-list-index.xml')
@@ -102,7 +102,7 @@ module Resync
           change_index.all_changes(in_range: (Time.utc(2013, 1, 2, 12)..Time.utc(2013, 1, 3, 0, 30))).each do |c|
             expect(c.modified_time).to be_time(Time.utc(2013, 1, 2, 23))
             expect(c.uri).to eq(URI('http://example.com/res2'))
-            count +=1
+            count += 1
           end
           expect(count).to eq(1)
         end
