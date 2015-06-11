@@ -32,15 +32,15 @@ module Resync
             expect(@helper).to receive(:fetch).with(uri: changedump_uri).once.and_return(changedump_data)
 
             expected_uris = %w(http://example.com/res3
-              http://example.com/res4
-              http://example.com/resourcedump-part1.zip
-              http://example.com/resourcedump-part2.zip
-              http://example.com/resourcedump-part3.zip
-              http://example.com/res4
-              http://example.com/res5-full.tiff
-              http://example.com/20130101-changedump.zip
-              http://example.com/20130102-changedump.zip
-              http://example.com/20130103-changedump.zip).map {|url| URI(url)}
+                               http://example.com/res4
+                               http://example.com/resourcedump-part1.zip
+                               http://example.com/resourcedump-part2.zip
+                               http://example.com/resourcedump-part3.zip
+                               http://example.com/res4
+                               http://example.com/res5-full.tiff
+                               http://example.com/20130101-changedump.zip
+                               http://example.com/20130102-changedump.zip
+                               http://example.com/20130103-changedump.zip).map { |url| URI(url) }
 
             cap_list = @client.get_and_parse(cap_list_uri)
             all_resources = cap_list.all_resources.to_a
@@ -91,7 +91,7 @@ module Resync
             expect(@helper).not_to receive(:fetch).with(uri: changedump_uri)
 
             cap_list = @client.get_and_parse(cap_list_uri)
-            cap_list.all_resources.each_with_index do |r, i|
+            cap_list.all_resources.each_with_index do |_, i|
               break if i >= 3
             end
           end
