@@ -3,7 +3,7 @@ require 'spec_helper'
 module Resync
   class Client
     module Mixins
-      describe ListOfZippedResourceLists do
+      describe DumpIndex do
         before(:each) do
           @helper = instance_double(Client::HTTPHelper)
           @client = Client.new(helper: @helper)

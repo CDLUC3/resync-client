@@ -3,7 +3,7 @@ require 'spec_helper'
 module Resync
   class Client
     module Mixins
-      describe ListOfResourceLists do
+      describe ListIndex do
         before(:each) do
           @helper = instance_double(Client::HTTPHelper)
           @client = Client.new(helper: @helper)

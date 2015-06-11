@@ -4,7 +4,7 @@ module Resync
   class Client
     module Mixins
       # A resource container whose resources are {ZippedResourceList}s
-      module ListOfZippedResourceLists
+      module DumpIndex
         prepend ResourceClientDelegate
 
         # Downloads and parses each resource list and returns a flattened enumeration
