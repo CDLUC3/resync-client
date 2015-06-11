@@ -1,3 +1,4 @@
+require 'resync'
 require_relative 'client_delegator'
 
 module Resync
@@ -15,5 +16,9 @@ module Resync
         end
       end
     end
+  end
+
+  class Augmented
+    prepend Client::Mixins::LinkClientDelegate
   end
 end

@@ -1,3 +1,4 @@
+require 'resync'
 require_relative 'client_delegator'
 
 module Resync
@@ -32,5 +33,13 @@ module Resync
         end
       end
     end
+  end
+
+  class Link
+    prepend Client::Mixins::Downloadable
+  end
+
+  class Resource
+    prepend Client::Mixins::Downloadable
   end
 end

@@ -1,3 +1,4 @@
+require 'resync'
 require_relative 'resource_client_delegate'
 
 module Resync
@@ -20,5 +21,13 @@ module Resync
         end
       end
     end
+  end
+
+  class ChangeDumpIndex
+    prepend Client::Mixins::DumpIndex
+  end
+
+  class ResourceDumpIndex
+    prepend Client::Mixins::DumpIndex
   end
 end

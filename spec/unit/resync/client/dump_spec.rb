@@ -3,7 +3,7 @@ require 'spec_helper'
 module Resync
   class Client
     module Mixins
-      describe ZippedResourceList do
+      describe Dump do
         it "works for #{ResourceDump}" do
           path = 'spec/data/resourcedump/resourcedump.xml'
           package_uri = URI('http://example.com/resourcedump.zip')

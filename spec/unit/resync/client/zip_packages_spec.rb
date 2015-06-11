@@ -40,10 +40,10 @@ module Resync
           zip_packages_1 = ZipPackages.new(resources[0, 3])
           zip_packages_2 = ZipPackages.new(resources[3, 3])
 
-          zrl1 = instance_double(Resync::Client::Mixins::ZippedResourceList)
+          zrl1 = instance_double(Resync::Client::Mixins::Dump)
           expect(zrl1).to receive(:zip_packages).twice.and_return(zip_packages_1)
 
-          zrl2 = instance_double(Resync::Client::Mixins::ZippedResourceList)
+          zrl2 = instance_double(Resync::Client::Mixins::Dump)
           expect(zrl2).to receive(:zip_packages).twice.and_return(zip_packages_2)
 
           flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)

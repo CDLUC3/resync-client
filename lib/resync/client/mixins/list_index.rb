@@ -1,3 +1,4 @@
+require 'resync'
 require_relative 'resource_client_delegate'
 
 module Resync
@@ -18,8 +19,15 @@ module Resync
             @resource_lists[r].resources
           end
         end
-
       end
     end
+  end
+
+  class ChangeListIndex
+    prepend Client::Mixins::ListIndex
+  end
+
+  class ResourceListIndex
+    prepend Client::Mixins::ListIndex
   end
 end

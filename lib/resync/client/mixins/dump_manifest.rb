@@ -1,3 +1,4 @@
+require 'resync'
 require_relative '../zip'
 require_relative 'bitstream_resource'
 
@@ -9,7 +10,7 @@ module Resync
       #
       # @!attribute [rw] zip_package
       #   @return [ZipPackage] the package.
-      module BitstreamResourceList
+      module DumpManifest
         attr_accessor :zip_package
 
         # Makes each provided resource a {BitstreamResource}
@@ -27,5 +28,13 @@ module Resync
         end
       end
     end
+  end
+
+  class ResourceDumpManifest
+    prepend Client::Mixins::DumpManifest
+  end
+
+  class ChangeDumpManifest
+    prepend Client::Mixins::DumpManifest
   end
 end
