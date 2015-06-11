@@ -34,10 +34,6 @@ module Resync
     prepend Client::Mixins::BitstreamResourceList
   end
 
-  class CapabilityList
-    prepend Client::Mixins::ListOfResourceLists
-  end
-
   class ChangeListIndex
     prepend Client::Mixins::ListOfResourceLists
   end
@@ -52,9 +48,5 @@ module Resync
 
   class ResourceDumpIndex
     prepend Client::Mixins::ListOfZippedResourceLists
-  end
-
-  class SourceDescription
-    prepend Client::Mixins::ListOfResourceLists
   end
 end

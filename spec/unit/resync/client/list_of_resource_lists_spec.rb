@@ -11,115 +11,91 @@ module Resync
 
         describe '#all_resources' do
           it 'flattens the child resourcelists' do
-            cap_list_uri = URI('http://example.com/capabilitylist.xml')
-            cap_list_data = File.read('spec/data/examples/capability-list.xml')
-            expect(@helper).to receive(:fetch).with(uri: cap_list_uri).and_return(cap_list_data)
+            index_uri = URI('http://example.com/resource-list-index.xml')
+            index_data = File.read('spec/data/examples/resource-list-index.xml')
+            expect(@helper).to receive(:fetch).with(uri: index_uri).and_return(index_data)
 
-            resourcelist_uri = URI('http://example.com/dataset1/resourcelist.xml')
-            resourcelist_data = File.read('spec/data/examples/resource-list.xml')
-            expect(@helper).to receive(:fetch).with(uri: resourcelist_uri).once.and_return(resourcelist_data)
+            list_1_uri = URI('http://example.com/resourcelist1.xml')
+            list_1_data = File.read('spec/data/examples/resource-list-1.xml')
+            expect(@helper).to receive(:fetch).with(uri: list_1_uri).once.and_return(list_1_data)
 
-            resourcedump_uri = URI('http://example.com/dataset1/resourcedump.xml')
-            resourcedump_data = File.read('spec/data/examples/resource-dump.xml')
-            expect(@helper).to receive(:fetch).with(uri: resourcedump_uri).once.and_return(resourcedump_data)
+            list_1_uri = URI('http://example.com/resourcelist2.xml')
+            list_1_data = File.read('spec/data/examples/resource-list-2.xml')
+            expect(@helper).to receive(:fetch).with(uri: list_1_uri).once.and_return(list_1_data)
 
-            changelist_uri = URI('http://example.com/dataset1/changelist.xml')
-            changelist_data = File.read('spec/data/examples/change-list.xml')
-            expect(@helper).to receive(:fetch).with(uri: changelist_uri).once.and_return(changelist_data)
+            list_1_uri = URI('http://example.com/resourcelist3.xml')
+            list_1_data = File.read('spec/data/examples/resource-list-3.xml')
+            expect(@helper).to receive(:fetch).with(uri: list_1_uri).once.and_return(list_1_data)
 
-            changedump_uri = URI('http://example.com/dataset1/changedump.xml')
-            changedump_data = File.read('spec/data/examples/change-dump.xml')
-            expect(@helper).to receive(:fetch).with(uri: changedump_uri).once.and_return(changedump_data)
-
-            expected_uris = %w(http://example.com/res3
-                               http://example.com/res4
-                               http://example.com/resourcedump-part1.zip
-                               http://example.com/resourcedump-part2.zip
-                               http://example.com/resourcedump-part3.zip
-                               http://example.com/res4
-                               http://example.com/res5-full.tiff
-                               http://example.com/20130101-changedump.zip
-                               http://example.com/20130102-changedump.zip
-                               http://example.com/20130103-changedump.zip).map { |url| URI(url) }
-
-            cap_list = @client.get_and_parse(cap_list_uri)
-            all_resources = cap_list.all_resources.to_a
-            expect(all_resources.size).to eq(expected_uris.size)
-            all_resources.each_with_index do |r, index|
-              expect(r.uri).to eq(expected_uris[index])
+            index = @client.get_and_parse(index_uri)
+            all_resources = index.all_resources.to_a
+            expect(all_resources.size).to eq(6)
+            all_resources.each_with_index do |r, i|
+              expected_uri = URI("http://example.com/res#{i + 1}")
+              expect(r.uri).to eq(expected_uri)
             end
           end
 
           it 'is lazy enough not to download anything till it \'s iterated ' do
-            cap_list_uri = URI('http://example.com/capabilitylist.xml')
-            cap_list_data = File.read('spec/data/examples/capability-list.xml')
-            expect(@helper).to receive(:fetch).with(uri: cap_list_uri).and_return(cap_list_data)
+            index_uri = URI('http://example.com/resource-list-index.xml')
+            index_data = File.read('spec/data/examples/resource-list-index.xml')
+            expect(@helper).to receive(:fetch).with(uri: index_uri).and_return(index_data)
 
-            resourcelist_uri = URI('http://example.com/dataset1/resourcelist.xml')
-            expect(@helper).not_to receive(:fetch).with(uri: resourcelist_uri)
+            list_1_uri = URI('http://example.com/resourcelist1.xml')
+            expect(@helper).not_to receive(:fetch).with(uri: list_1_uri)
 
-            resourcedump_uri = URI('http://example.com/dataset1/resourcedump.xml')
-            expect(@helper).not_to receive(:fetch).with(uri: resourcedump_uri)
+            list_1_uri = URI('http://example.com/resourcelist2.xml')
+            expect(@helper).not_to receive(:fetch).with(uri: list_1_uri)
 
-            changelist_uri = URI('http://example.com/dataset1/changelist.xml')
-            expect(@helper).not_to receive(:fetch).with(uri: changelist_uri)
+            list_1_uri = URI('http://example.com/resourcelist3.xml')
+            expect(@helper).not_to receive(:fetch).with(uri: list_1_uri)
 
-            changedump_uri = URI('http://example.com/dataset1/changedump.xml')
-            expect(@helper).not_to receive(:fetch).with(uri: changedump_uri)
-
-            cap_list = @client.get_and_parse(cap_list_uri)
-            cap_list.all_resources
+            index = @client.get_and_parse(index_uri)
+            index.all_resources
           end
 
           it 'is lazy enough not to download resources it doesn\'t need' do
-            cap_list_uri = URI('http://example.com/capabilitylist.xml')
-            cap_list_data = File.read('spec/data/examples/capability-list.xml')
-            expect(@helper).to receive(:fetch).with(uri: cap_list_uri).and_return(cap_list_data)
+            index_uri = URI('http://example.com/resource-list-index.xml')
+            index_data = File.read('spec/data/examples/resource-list-index.xml')
+            expect(@helper).to receive(:fetch).with(uri: index_uri).and_return(index_data)
 
-            resourcelist_uri = URI('http://example.com/dataset1/resourcelist.xml')
-            resourcelist_data = File.read('spec/data/examples/resource-list.xml')
-            expect(@helper).to receive(:fetch).with(uri: resourcelist_uri).once.and_return(resourcelist_data)
+            list_1_uri = URI('http://example.com/resourcelist1.xml')
+            list_1_data = File.read('spec/data/examples/resource-list-1.xml')
+            expect(@helper).to receive(:fetch).with(uri: list_1_uri).once.and_return(list_1_data)
 
-            resourcedump_uri = URI('http://example.com/dataset1/resourcedump.xml')
-            resourcedump_data = File.read('spec/data/examples/resource-dump.xml')
-            expect(@helper).to receive(:fetch).with(uri: resourcedump_uri).once.and_return(resourcedump_data)
+            list_1_uri = URI('http://example.com/resourcelist2.xml')
+            list_1_data = File.read('spec/data/examples/resource-list-2.xml')
+            expect(@helper).to receive(:fetch).with(uri: list_1_uri).once.and_return(list_1_data)
 
-            changelist_uri = URI('http://example.com/dataset1/changelist.xml')
-            expect(@helper).not_to receive(:fetch).with(uri: changelist_uri)
+            list_1_uri = URI('http://example.com/resourcelist3.xml')
+            expect(@helper).not_to receive(:fetch).with(uri: list_1_uri)
 
-            changedump_uri = URI('http://example.com/dataset1/changedump.xml')
-            expect(@helper).not_to receive(:fetch).with(uri: changedump_uri)
-
-            cap_list = @client.get_and_parse(cap_list_uri)
-            cap_list.all_resources.each_with_index do |_, i|
+            index = @client.get_and_parse(index_uri)
+            index.all_resources.each_with_index do |_, i|
               break if i >= 3
             end
           end
 
           it 'caches downloaded resources' do
-            cap_list_uri = URI('http://example.com/capabilitylist.xml')
-            cap_list_data = File.read('spec/data/examples/capability-list.xml')
-            expect(@helper).to receive(:fetch).with(uri: cap_list_uri).and_return(cap_list_data)
+            index_uri = URI('http://example.com/resource-list-index.xml')
+            index_data = File.read('spec/data/examples/resource-list-index.xml')
+            expect(@helper).to receive(:fetch).with(uri: index_uri).and_return(index_data)
 
-            resourcelist_uri = URI('http://example.com/dataset1/resourcelist.xml')
-            resourcelist_data = File.read('spec/data/examples/resource-list.xml')
-            expect(@helper).to receive(:fetch).with(uri: resourcelist_uri).once.and_return(resourcelist_data)
+            list_1_uri = URI('http://example.com/resourcelist1.xml')
+            list_1_data = File.read('spec/data/examples/resource-list-1.xml')
+            expect(@helper).to receive(:fetch).with(uri: list_1_uri).once.and_return(list_1_data)
 
-            resourcedump_uri = URI('http://example.com/dataset1/resourcedump.xml')
-            resourcedump_data = File.read('spec/data/examples/resource-dump.xml')
-            expect(@helper).to receive(:fetch).with(uri: resourcedump_uri).once.and_return(resourcedump_data)
+            list_1_uri = URI('http://example.com/resourcelist2.xml')
+            list_1_data = File.read('spec/data/examples/resource-list-2.xml')
+            expect(@helper).to receive(:fetch).with(uri: list_1_uri).once.and_return(list_1_data)
 
-            changelist_uri = URI('http://example.com/dataset1/changelist.xml')
-            changelist_data = File.read('spec/data/examples/change-list.xml')
-            expect(@helper).to receive(:fetch).with(uri: changelist_uri).once.and_return(changelist_data)
+            list_1_uri = URI('http://example.com/resourcelist3.xml')
+            list_1_data = File.read('spec/data/examples/resource-list-3.xml')
+            expect(@helper).to receive(:fetch).with(uri: list_1_uri).once.and_return(list_1_data)
 
-            changedump_uri = URI('http://example.com/dataset1/changedump.xml')
-            changedump_data = File.read('spec/data/examples/change-dump.xml')
-            expect(@helper).to receive(:fetch).with(uri: changedump_uri).once.and_return(changedump_data)
-
-            cap_list = @client.get_and_parse(cap_list_uri)
-            a1 = cap_list.all_resources.to_a
-            a2 = cap_list.all_resources.to_a
+            index = @client.get_and_parse(index_uri)
+            a1 = index.all_resources.to_a
+            a2 = index.all_resources.to_a
             a1.each_with_index do |r, i|
               expect(r).to be(a2[i])
             end
