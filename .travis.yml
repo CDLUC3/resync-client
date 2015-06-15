@@ -1,5 +1,7 @@
 language: ruby
 
-env:
-  - CODECLIMATE_REPO_TOKEN=dbb3c6eb70c0de106cdc3f65d542882e7bfce9deee2db544dbcc7ca0a4e5f3da bundle exec rake
+addons:
+  code_climate:
+    repo_token: dbb3c6eb70c0de106cdc3f65d542882e7bfce9deee2db544dbcc7ca0a4e5f3da
+    
 
