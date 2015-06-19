@@ -38,6 +38,20 @@ module Resync
   end
 
   class ChangeDump
-    prepend Client::Mixins::Dump
+    include Client::Mixins::Dump
+
+    # A list (downloaded lazily) of the {Resync::Client::Zip::ZipPackage}s for each resource
+    # @return [Resync::Client::Zip::ZipPackages] the zip packages for each resource
+    def zip_packages(in_range: nil)
+      if in_range
+        change_lists = change_lists(in_range: in_range, strict: false)
+        Resync::Client::Zip::ZipPackages.new(change_lists)
+      else
+        super()
+        # @zip_packages ||= Resync::Client::Zip::ZipPackages.new(resources)
+      end
+    end
+
+    alias_method :all_zip_packages, :zip_packages
   end
 end
