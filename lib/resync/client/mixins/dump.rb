@@ -7,6 +7,8 @@ module Resync
     module Mixins
       # A list of resources each of which refers to a zipped bitstream package.
       module Dump
+
+        # Makes each resource a {ZippedResource}
         def resources=(value)
           super
           resources.each do |r|
@@ -17,10 +19,10 @@ module Resync
           end
         end
 
-        # A list (downloaded lazily) of the {Resync::Client::Zip::ZipPackage}s for each resource
-        # @return [Resync::Client::Zip::ZipPackages] the zip packages for each resource
+        # The {Resync::Client::Zip::ZipPackage}s for each resource, downloaded lazily
+        # @return [Enumerator#Lazy<Resync::Client::Zip::ZipPackage>] the zip packages for each resource
         def zip_packages
-          @zip_packages ||= Resync::Client::Zip::ZipPackages.new(resources)
+          @zip_packages ||= init_zip_packages
         end
 
         # Aliases +:zip_packages+ as +:all_zip_packages+ for transparent
@@ -28,6 +30,22 @@ module Resync
         # +ChangeDump+ and +ChangeDumpIndex+
         def self.prepended(ext)
           ext.send(:alias_method, :all_zip_packages, :zip_packages)
+        end
+
+        private
+
+        def init_zip_packages
+          zip_packages = self.resources.map do |r|
+            package_for(r)
+          end
+          zip_packages.define_singleton_method(:[]) do |idx|
+            package_for(self.resources[idx])
+          end
+          zip_packages
+        end
+
+        def package_for(r)
+          (@cached_packages ||= {})[r] ||= r.zip_package
         end
       end
     end
@@ -55,3 +73,5 @@ module Resync
     alias_method :all_zip_packages, :zip_packages
   end
 end
+
+
