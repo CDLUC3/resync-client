@@ -49,9 +49,8 @@ module Resync
             allow(resource).to receive(:client_delegate=)
             resource
           end
-          all_resources = ResourceList.new(resources: resources).all_resources
-          expect(all_resources).to be_a(Util::IndexableLazy)
-          expect(all_resources.to_a).to eq(resources)
+          list = ResourceList.new(resources: resources)
+          expect(list.all_resources).to be(list.resources)
         end
       end
     end
@@ -65,9 +64,8 @@ module Resync
             resources[1] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 1, 1))
             resources[2] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2001, 3, 1))
 
-            all_resources = ResourceList.new(resources: resources).all_resources
-            expect(all_resources).to be_a(Util::IndexableLazy)
-            expect(all_resources.to_a).to eq(resources)
+            list = ChangeList.new(resources: resources)
+            expect(list.all_resources).to be(list.resources)
           end
         end
 

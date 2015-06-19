@@ -1,3 +1,8 @@
+# 0.3.0
+
+- Update to depend on [resync](https://github.com/dmolesUC3/resync) 0.3.0
+- Replace `ZipPackages` class with simple enumerable
+
 # 0.2.6
 
 - Added `#all_resources` (as alias for `#resources`) to `ChangeList`/`ResourceList` for transparent interoperability with `ChangeListIndex`/`ResourceListIndex`
