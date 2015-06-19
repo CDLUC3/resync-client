@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 module Resync
+  # TODO introduce shared examples
   describe ResourceDump do
     describe '#zip_packages' do
       it 'transparently exposes bitstreams' do
@@ -21,6 +22,59 @@ module Resync
         expect(bitstreams.size).to eq(2)
         expect(bitstreams[0].content).to eq(File.read('spec/data/resourcedump/resources/res1'))
         expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
+      end
+
+      it 'caches zip packages' do
+        resources = Array.new(3) { |i| Resource.new(uri: "http://example.org/res#{i}") }
+
+        zip_package = instance_double(Client::Zip::ZipPackage)
+        expect(resources[1]).to receive(:zip_package).once.and_return(zip_package)
+
+        zip_packages = ResourceDump.new(resources: resources).zip_packages
+        expect(zip_packages[1]).to be(zip_package)
+        expect(zip_packages[1]).to be(zip_package)
+      end
+
+      it 'flatmaps' do
+        resources = Array.new(6) { |i| Resource.new(uri: "http://example.org/res#{i}") }
+        all_packages = Array.new(6) do |i|
+          zip_package = instance_double(Client::Zip::ZipPackage)
+          expect(resources[i]).to receive(:zip_package).once.and_return(zip_package)
+          zip_package
+        end
+
+        zrl1 = ResourceDump.new(resources: resources[0, 3])
+        zrl2 = ResourceDump.new(resources: resources[3, 3])
+
+        flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)
+        expect(flat_mapped).to eq(all_packages)
+
+        lazy_flat_mapped = [zrl1, zrl2].lazy.flat_map(&:zip_packages).to_a
+        expect(lazy_flat_mapped).to eq(all_packages)
+      end
+
+      it 'supports lazy iteration 'do
+        manifests = Array.new(3) { instance_double(ChangeDumpManifest) }
+        all_packages = Array.new(3) do |index|
+          zip_package = instance_double(Client::Zip::ZipPackage)
+          allow(zip_package).to receive(:manifest).and_return(manifests[index])
+          zip_package
+        end
+        resources = Array.new(3) do |index|
+          resource = Resource.new(uri: "http://example.org/res#{index}")
+          if index > 1
+            expect(resource).not_to receive(:zip_package)
+          else
+            expect(resource).to receive(:zip_package).and_return(all_packages[index])
+          end
+          resource
+        end
+
+        zip_packages = ResourceDump.new(resources: resources).zip_packages
+        zip_packages.each_with_index do |zip_package, index|
+          expect(zip_package.manifest).to be(manifests[index])
+          break if index >= 1
+        end
       end
     end
 
@@ -67,6 +121,59 @@ module Resync
         expect(bitstreams.size).to eq(2)
         expect(bitstreams[0].content).to eq(File.read('spec/data/resourcedump/resources/res1'))
         expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
+      end
+
+      it 'caches zip packages' do
+        resources = Array.new(3) { |i| Resource.new(uri: "http://example.org/res#{i}") }
+
+        zip_package = instance_double(Client::Zip::ZipPackage)
+        expect(resources[1]).to receive(:zip_package).once.and_return(zip_package)
+
+        zip_packages = ChangeDump.new(resources: resources).zip_packages
+        expect(zip_packages[1]).to be(zip_package)
+        expect(zip_packages[1]).to be(zip_package)
+      end
+
+      it 'flatmaps' do
+        resources = Array.new(6) { |i| Resource.new(uri: "http://example.org/res#{i}") }
+        all_packages = Array.new(6) do |i|
+          zip_package = instance_double(Client::Zip::ZipPackage)
+          expect(resources[i]).to receive(:zip_package).once.and_return(zip_package)
+          zip_package
+        end
+
+        zrl1 = ChangeDump.new(resources: resources[0, 3])
+        zrl2 = ChangeDump.new(resources: resources[3, 3])
+
+        flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)
+        expect(flat_mapped).to eq(all_packages)
+
+        lazy_flat_mapped = [zrl1, zrl2].lazy.flat_map(&:zip_packages).to_a
+        expect(lazy_flat_mapped).to eq(all_packages)
+      end
+
+      it 'supports lazy iteration 'do
+        manifests = Array.new(3) { instance_double(ChangeDumpManifest) }
+        all_packages = Array.new(3) do |index|
+          zip_package = instance_double(Client::Zip::ZipPackage)
+          allow(zip_package).to receive(:manifest).and_return(manifests[index])
+          zip_package
+        end
+        resources = Array.new(3) do |index|
+          resource = Resource.new(uri: "http://example.org/res#{index}")
+          if index > 1
+            expect(resource).not_to receive(:zip_package)
+          else
+            expect(resource).to receive(:zip_package).and_return(all_packages[index])
+          end
+          resource
+        end
+
+        zip_packages = ChangeDump.new(resources: resources).zip_packages
+        zip_packages.each_with_index do |zip_package, index|
+          expect(zip_package.manifest).to be(manifests[index])
+          break if index >= 1
+        end
       end
     end
 
