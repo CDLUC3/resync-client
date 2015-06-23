@@ -36,12 +36,20 @@ module Resync
       it 'should accept an optional time range' do
         packages = @dump.zip_packages(in_range: Time.utc(2013, 1, 3)..Time.utc(2013, 1, 4))
         expect(packages.size).to eq(2)
-        expect(packages.to_a).to eq([@resources[1], @resources[2]])
+        expect(packages.to_a).to eq([@zip_packages[1], @zip_packages[2]])
+      end
+
+      it 'should not require a time range' do
+        packages = @dump.zip_packages
+        expect(packages.to_a).to eq(@zip_packages)
       end
     end
 
     describe '#all_zip_packages' do
-      it 'should delegate to #zip_packages'
+      it 'should delegate to #zip_packages' do
+        packages = @dump.all_zip_packages
+        expect(packages.to_a).to eq(@zip_packages)
+      end
     end
   end
 
