@@ -14,7 +14,7 @@ module Resync
         # @return [Enumerator::Lazy<Resync::Client::Zip::ZipPackage>] the flattened enumeration of resources
         def all_zip_packages
           @zipped_resource_lists ||= {}
-          resources.flat_map do |r|
+          resources.lazy.flat_map do |r|
             @zipped_resource_lists[r] ||= r.get_and_parse
             @zipped_resource_lists[r].respond_to?(:zip_packages) ? @zipped_resource_lists[r].zip_packages : []
           end

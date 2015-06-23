@@ -14,7 +14,7 @@ module Resync
         # @return [Enumerator::Lazy<Resync::Resource>] the flattened enumeration of resources
         def all_resources
           @resource_lists ||= {}
-          resources.flat_map do |r|
+          resources.lazy.flat_map do |r|
             @resource_lists[r] ||= r.get_and_parse
             @resource_lists[r].resources
           end

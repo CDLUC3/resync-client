@@ -1,4 +1,5 @@
 require 'resync'
+require 'lazy'
 require_relative '../zip'
 require_relative 'zipped_resource'
 
@@ -22,7 +23,7 @@ module Resync
         # The {Resync::Client::Zip::ZipPackage}s for each resource, downloaded lazily
         # @return [Enumerator#Lazy<Resync::Client::Zip::ZipPackage>] the zip packages for each resource
         def zip_packages
-          @zip_packages ||= init_zip_packages
+          @zip_packages ||= resources.map { |r| Lazy.promise { r.zip_package } }
         end
 
         # Aliases +:zip_packages+ as +:all_zip_packages+ for transparent
@@ -32,21 +33,6 @@ module Resync
           ext.send(:alias_method, :all_zip_packages, :zip_packages)
         end
 
-        private
-
-        def init_zip_packages
-          zip_packages = self.resources.map do |r|
-            package_for(r)
-          end
-          zip_packages.define_singleton_method(:[]) do |idx|
-            package_for(self.resources[idx])
-          end
-          zip_packages
-        end
-
-        def package_for(r)
-          (@cached_packages ||= {})[r] ||= r.zip_package
-        end
       end
     end
   end
@@ -73,5 +59,3 @@ module Resync
     alias_method :all_zip_packages, :zip_packages
   end
 end
-
-

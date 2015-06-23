@@ -25,9 +25,9 @@ module Resync
 
       it 'is lazy' do
         resources = Array.new(3) { |i| Resource.new(uri: "http://example.org/res#{i}") }
-        dump = ResourceDump.new(resources)
+        dump = ResourceDump.new(resources: resources)
         zip_packages = dump.zip_packages
-        zip_package = instance_double(ZipPackage)
+        zip_package = instance_double(Client::Zip::ZipPackage)
 
         expect(resources[0]).not_to receive(:zip_package)
         expect(resources[1]).not_to receive(:zip_package)
@@ -39,19 +39,19 @@ module Resync
       it 'flatmaps' do
         resources = Array.new(6) { |i| Resource.new(uri: "http://example.org/res#{i}") }
         all_packages = Array.new(6) do |i|
-          zip_package = instance_double(ZipPackage)
+          zip_package = instance_double(Client::Zip::ZipPackage)
           expect(resources[i]).to receive(:zip_package).once.and_return(zip_package)
           zip_package
         end
 
-        zrl1 = ResourceDump.new(resources[0, 3])
-        zrl2 = ResourceDump.new(resources[3, 3])
-
-        flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)
-        expect(flat_mapped).to eq(all_packages)
+        zrl1 = ResourceDump.new(resources: resources[0, 3])
+        zrl2 = ResourceDump.new(resources: resources[3, 3])
 
         lazy_flat_mapped = [zrl1, zrl2].lazy.flat_map(&:zip_packages).to_a
         expect(lazy_flat_mapped).to eq(all_packages)
+
+        flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)
+        expect(flat_mapped).to eq(all_packages)
       end
     end
 
@@ -99,12 +99,12 @@ module Resync
         expect(bitstreams[0].content).to eq(File.read('spec/data/resourcedump/resources/res1'))
         expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
       end
-      
+
       it 'is lazy' do
         resources = Array.new(3) { |i| Resource.new(uri: "http://example.org/res#{i}") }
-        dump = ChangeDump.new(resources)
+        dump = ChangeDump.new(resources: resources)
         zip_packages = dump.zip_packages
-        zip_package = instance_double(ZipPackage)
+        zip_package = instance_double(Client::Zip::ZipPackage)
 
         expect(resources[0]).not_to receive(:zip_package)
         expect(resources[1]).not_to receive(:zip_package)
@@ -116,19 +116,19 @@ module Resync
       it 'flatmaps' do
         resources = Array.new(6) { |i| Resource.new(uri: "http://example.org/res#{i}") }
         all_packages = Array.new(6) do |i|
-          zip_package = instance_double(ZipPackage)
+          zip_package = instance_double(Client::Zip::ZipPackage)
           expect(resources[i]).to receive(:zip_package).once.and_return(zip_package)
           zip_package
         end
 
-        zrl1 = ChangeDump.new(resources[0, 3])
-        zrl2 = ChangeDump.new(resources[3, 3])
-
-        flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)
-        expect(flat_mapped).to eq(all_packages)
+        zrl1 = ChangeDump.new(resources: resources[0, 3])
+        zrl2 = ChangeDump.new(resources: resources[3, 3])
 
         lazy_flat_mapped = [zrl1, zrl2].lazy.flat_map(&:zip_packages).to_a
         expect(lazy_flat_mapped).to eq(all_packages)
+
+        flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)
+        expect(flat_mapped).to eq(all_packages)
       end
     end
 
