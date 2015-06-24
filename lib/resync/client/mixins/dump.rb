@@ -45,6 +45,10 @@ module Resync
     include Client::Mixins::Dump
 
     # A list (downloaded lazily) of the {Resync::Client::Zip::ZipPackage}s for each resource
+    # If a time range parameter is provided, the lists of packages is filtered by +from_time+
+    # and +until_time+, in non-strict mode (only excluding those lists provably not in the range,
+    # i.e., including packages without +from_time+ or +until_time+).
+    # @param in_range [Range<Time>] the range of times to filter by
     # @return [Array<Lazy::Promise<Resync::Client::Zip::ZipPackage>>] the zip packages for each resource
     def zip_packages(in_range: nil)
       if in_range
