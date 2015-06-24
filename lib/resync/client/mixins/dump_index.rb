@@ -18,10 +18,14 @@ module Resync
           end
         end
 
-        def package_for(r)
+        def zipped_resource_list_for(r)
           @zipped_resource_lists ||= {}
           @zipped_resource_lists[r] ||= r.get_and_parse
-          @zipped_resource_lists[r].respond_to?(:zip_packages) ? @zipped_resource_lists[r].zip_packages : []
+        end
+
+        def package_for(r)
+          zrl = zipped_resource_list_for(r)
+          zrl.respond_to?(:zip_packages) ? zrl.zip_packages : []
         end
       end
     end
@@ -40,9 +44,8 @@ module Resync
     end
 
     def package_for(r, in_range: nil)
-      @zipped_resource_lists ||= {}
-      @zipped_resource_lists[r] ||= r.get_and_parse
-      in_range ? @zipped_resource_lists[r].zip_packages(in_range: in_range) : super(r)
+      zrl = zipped_resource_list_for(r)
+      in_range ? zrl.zip_packages(in_range: in_range) : super(r)
     end
   end
 
