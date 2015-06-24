@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module Resync
-  # TODO introduce shared examples
+  # TODO: introduce shared examples
   describe ResourceDump do
     describe '#zip_packages' do
       it 'transparently exposes bitstreams' do
@@ -24,15 +24,17 @@ module Resync
         expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
       end
 
-      it 'caches zip packages' do
+      it 'is lazy' do
         resources = Array.new(3) { |i| Resource.new(uri: "http://example.org/res#{i}") }
-
+        dump = ResourceDump.new(resources: resources)
+        zip_packages = dump.zip_packages
         zip_package = instance_double(Client::Zip::ZipPackage)
-        expect(resources[1]).to receive(:zip_package).once.and_return(zip_package)
 
-        zip_packages = ResourceDump.new(resources: resources).zip_packages
-        expect(zip_packages[1]).to be(zip_package)
-        expect(zip_packages[1]).to be(zip_package)
+        expect(resources[0]).not_to receive(:zip_package)
+        expect(resources[1]).not_to receive(:zip_package)
+        expect(resources[2]).to receive(:zip_package).and_return(zip_package)
+
+        expect(zip_packages[2]).to be(zip_package)
       end
 
       it 'flatmaps' do
@@ -123,15 +125,17 @@ module Resync
         expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
       end
 
-      it 'caches zip packages' do
+      it 'is lazy' do
         resources = Array.new(3) { |i| Resource.new(uri: "http://example.org/res#{i}") }
-
+        dump = ChangeDump.new(resources: resources)
+        zip_packages = dump.zip_packages
         zip_package = instance_double(Client::Zip::ZipPackage)
-        expect(resources[1]).to receive(:zip_package).once.and_return(zip_package)
 
-        zip_packages = ChangeDump.new(resources: resources).zip_packages
-        expect(zip_packages[1]).to be(zip_package)
-        expect(zip_packages[1]).to be(zip_package)
+        expect(resources[0]).not_to receive(:zip_package)
+        expect(resources[1]).not_to receive(:zip_package)
+        expect(resources[2]).to receive(:zip_package).and_return(zip_package)
+
+        expect(zip_packages[2]).to be(zip_package)
       end
 
       it 'flatmaps' do
@@ -145,11 +149,11 @@ module Resync
         zrl1 = ChangeDump.new(resources: resources[0, 3])
         zrl2 = ChangeDump.new(resources: resources[3, 3])
 
-        flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)
-        expect(flat_mapped).to eq(all_packages)
-
         lazy_flat_mapped = [zrl1, zrl2].lazy.flat_map(&:zip_packages).to_a
         expect(lazy_flat_mapped).to eq(all_packages)
+
+        flat_mapped = [zrl1, zrl2].flat_map(&:zip_packages)
+        expect(flat_mapped).to eq(all_packages)
       end
 
       it 'supports lazy iteration 'do
