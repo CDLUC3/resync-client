@@ -4,21 +4,21 @@ module Resync
   describe ChangeDumpIndex do
     before(:each) do
       @change_dump_index = ChangeDumpIndex.load_from_xml(XML.element(
-        "<sitemapindex xmlns='http://www.sitemaps.org/schemas/sitemap/0.9' xmlns:rs='http://www.openarchives.org/rs/terms/'>
-          <rs:md capability='changedump'/>
-          <sitemap>
-            <loc>http://example.com/20130101-changedump.xml</loc>
-            <rs:md from='2013-01-01T00:00:00Z' until='2013-01-02T00:00:00Z'/>
-          </sitemap>
-          <sitemap>
-            <loc>http://example.com/20130102-changedump.xml</loc>
-            <rs:md from='2013-01-02T00:00:00Z' until='2013-01-03T00:00:00Z'/>
-          </sitemap>
-          <sitemap>
-            <loc>http://example.com/20130103-changedump.xml</loc>
-            <rs:md from='2013-01-03T00:00:00Z' until='2013-01-04T00:00:00Z'/>
-          </sitemap>
-        </sitemapindex>"))
+                                                           "<sitemapindex xmlns='http://www.sitemaps.org/schemas/sitemap/0.9' xmlns:rs='http://www.openarchives.org/rs/terms/'>
+                                                             <rs:md capability='changedump'/>
+                                                             <sitemap>
+                                                               <loc>http://example.com/20130101-changedump.xml</loc>
+                                                               <rs:md from='2013-01-01T00:00:00Z' until='2013-01-02T00:00:00Z'/>
+                                                             </sitemap>
+                                                             <sitemap>
+                                                               <loc>http://example.com/20130102-changedump.xml</loc>
+                                                               <rs:md from='2013-01-02T00:00:00Z' until='2013-01-03T00:00:00Z'/>
+                                                             </sitemap>
+                                                             <sitemap>
+                                                               <loc>http://example.com/20130103-changedump.xml</loc>
+                                                               <rs:md from='2013-01-03T00:00:00Z' until='2013-01-04T00:00:00Z'/>
+                                                             </sitemap>
+                                                           </sitemapindex>"))
 
       @change_dumps = [
         "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9' xmlns:rs='http://www.openarchives.org/rs/terms/'>
@@ -32,17 +32,17 @@ module Resync
             <rs:md modified='2013-01-01T23:59:59Z' from='2013-01-01T12:00:00Z' until='2013-01-02T00:00:00Z'/>
           </url>
         </urlset>",
-       "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9' xmlns:rs='http://www.openarchives.org/rs/terms/'>
-          <rs:md capability='changedump'/>
-          <url>
-            <loc>http://example.com/20130102-changedump-0.zip</loc>
-            <rs:md modified='2013-01-02T11:59:59Z' from='2013-01-02T00:00:00Z' until='2013-01-02T12:00:00Z'/>
-          </url>
-          <url>
-            <loc>http://example.com/20130102-changedump-1.zip</loc>
-            <rs:md modified='2013-01-02T23:59:59Z' from='2013-01-02T12:00:00Z' until='2013-01-03T00:00:00Z'/>
-          </url>
-        </urlset>",
+        "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9' xmlns:rs='http://www.openarchives.org/rs/terms/'>
+           <rs:md capability='changedump'/>
+           <url>
+             <loc>http://example.com/20130102-changedump-0.zip</loc>
+             <rs:md modified='2013-01-02T11:59:59Z' from='2013-01-02T00:00:00Z' until='2013-01-02T12:00:00Z'/>
+           </url>
+           <url>
+             <loc>http://example.com/20130102-changedump-1.zip</loc>
+             <rs:md modified='2013-01-02T23:59:59Z' from='2013-01-02T12:00:00Z' until='2013-01-03T00:00:00Z'/>
+           </url>
+         </urlset>",
         "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9' xmlns:rs='http://www.openarchives.org/rs/terms/'>
           <rs:md capability='changedump'/>
           <url>
