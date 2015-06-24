@@ -2,6 +2,7 @@ require 'spec_helper'
 
 module Resync
 
+  # TODO: Share examples
   describe 'extensions' do
 
     # ------------------------------------------------------------
@@ -178,6 +179,14 @@ module Resync
           expect(client).to receive(:get_and_parse).with(@resources[0].uri) { resource }
           expect(@resources[0].get_and_parse).to be(resource)
         end
+
+        it 'caches the downloaded contents' do
+          client = instance_double(Resync::Client)
+          resource = instance_double(Resync::ResourceList)
+          @list.client = client
+          expect(client).to receive(:get_and_parse).once.with(@resources[0].uri) { resource }
+          expect(@resources[0].get_and_parse).to be(@resources[0].get_and_parse)
+        end
       end
 
       describe '#get' do
@@ -187,6 +196,14 @@ module Resync
           @list.client = client
           expect(client).to receive(:get).with(@resources[0].uri) { data }
           expect(@resources[0].get).to be(data)
+        end
+
+        it 'caches the downloaded contents' do
+          data = 'I am the contents of a resource'
+          client = instance_double(Resync::Client)
+          @list.client = client
+          expect(client).to receive(:get).once.with(@resources[0].uri) { data }
+          expect(@resources[0].get).to be(@resources[0].get)
         end
       end
 
@@ -198,6 +215,16 @@ module Resync
           expect(client).to receive(:download_to_temp_file).with(@resources[0].uri) { path }
           expect(@resources[0].download_to_temp_file).to be(path)
         end
+
+        it 'downloads anew each time' do
+          path1 = '/tmp/whatever1.zip'
+          path2 = '/tmp/whatever2.zip'
+          client = instance_double(Resync::Client)
+          @list.client = client
+          expect(client).to receive(:download_to_temp_file).twice.with(@resources[0].uri).and_return(path1, path2)
+          expect(@resources[0].download_to_temp_file).to eq(path1)
+          expect(@resources[0].download_to_temp_file).to eq(path2)
+        end
       end
 
       describe '#download_to_file' do
@@ -207,6 +234,14 @@ module Resync
           @list.client = client
           expect(client).to receive(:download_to_file).with(uri: @resources[0].uri, path: path) { path }
           expect(@resources[0].download_to_file(path)).to be(path)
+        end
+
+        it 'downloads anew each time' do
+          path = '/tmp/whatever.zip'
+          client = instance_double(Resync::Client)
+          @list.client = client
+          expect(client).to receive(:download_to_file).twice.with(uri: @resources[0].uri, path: path) { path }
+          expect(@resources[0].download_to_file(path)).to eq(@resources[0].download_to_file(path))
         end
       end
     end
@@ -220,6 +255,14 @@ module Resync
           expect(client).to receive(:get_and_parse).with(@links[0].uri) { resource }
           expect(@links[0].get_and_parse).to be(resource)
         end
+
+        it 'caches the downloaded contents' do
+          client = instance_double(Resync::Client)
+          resource = instance_double(Resync::ResourceList)
+          @list.client = client
+          expect(client).to receive(:get_and_parse).once.with(@links[0].uri) { resource }
+          expect(@links[0].get_and_parse).to be(@links[0].get_and_parse)
+        end
       end
 
       describe '#get' do
@@ -230,11 +273,19 @@ module Resync
           expect(client).to receive(:get).with(@links[0].uri) { data }
           expect(@links[0].get).to be(data)
         end
+
+        it 'caches the downloaded contents' do
+          data = 'I am the contents of a link'
+          client = instance_double(Resync::Client)
+          @list.client = client
+          expect(client).to receive(:get).once.with(@links[0].uri) { data }
+          expect(@links[0].get).to be(@links[0].get)
+        end
       end
 
       describe '#download_to_temp_file' do
         it 'downloads the link contents to a file using the injected client' do
-          path = '/tmp/whatever.zip'
+          path = '/tmp/whatever1.zip'
           client = instance_double(Resync::Client)
           @list.client = client
           expect(client).to receive(:download_to_temp_file).with(@links[0].uri) { path }

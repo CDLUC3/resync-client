@@ -1,3 +1,7 @@
+# 0.3.1
+
+- Make `#get` and `#get_and_parse` in `Downloadable` (i.e., `Resource` and `Link`) cache the downloaded content
+
 # 0.3.0
 
 - Update to depend on [resync](https://github.com/dmolesUC3/resync) 0.3.0
