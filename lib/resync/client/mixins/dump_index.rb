@@ -42,11 +42,7 @@ module Resync
     def package_for(r, in_range: nil)
       @zipped_resource_lists ||= {}
       @zipped_resource_lists[r] ||= r.get_and_parse
-      if @zipped_resource_lists[r].respond_to?(:zip_packages)
-        in_range ? @zipped_resource_lists[r].zip_packages(in_range: in_range) : super(r)
-      else
-        []
-      end
+      in_range ? @zipped_resource_lists[r].zip_packages(in_range: in_range) : super(r)
     end
   end
 

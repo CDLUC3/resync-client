@@ -21,7 +21,7 @@ module Resync
         end
 
         # The {Resync::Client::Zip::ZipPackage}s for each resource, downloaded lazily
-        # @return [Enumerator#Lazy<Resync::Client::Zip::ZipPackage>] the zip packages for each resource
+        # @return [Array<Lazy::Promise<Resync::Client::Zip::ZipPackage>>] the zip packages for each resource
         def zip_packages
           @zip_packages ||= resources.map { |r| Lazy.promise { r.zip_package } }
         end
@@ -45,11 +45,11 @@ module Resync
     include Client::Mixins::Dump
 
     # A list (downloaded lazily) of the {Resync::Client::Zip::ZipPackage}s for each resource
-    # @return [Resync::Client::Zip::ZipPackages] the zip packages for each resource
+    # @return [Array<Lazy::Promise<Resync::Client::Zip::ZipPackage>>] the zip packages for each resource
     def zip_packages(in_range: nil)
       if in_range
         change_lists = change_lists(in_range: in_range, strict: false)
-        Resync::Client::Zip::ZipPackages.new(change_lists)
+        change_lists.map { |r| Lazy.promise { r.zip_package } }
       else
         super()
       end
