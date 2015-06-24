@@ -53,10 +53,4 @@ module Resync
     end
   end
 
-  describe ChangeDumpIndex do
-    describe '#all_zip_packages' do
-      it 'should accept an optional time range'
-    end
-  end
-
 end

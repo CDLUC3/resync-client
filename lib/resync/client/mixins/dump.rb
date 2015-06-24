@@ -52,7 +52,6 @@ module Resync
         Resync::Client::Zip::ZipPackages.new(change_lists)
       else
         super()
-        # @zip_packages ||= Resync::Client::Zip::ZipPackages.new(resources)
       end
     end
 
