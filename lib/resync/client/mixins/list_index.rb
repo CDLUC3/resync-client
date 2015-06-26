@@ -20,6 +20,14 @@ module Resync
           end
         end
       end
+
+      module PlainList
+        # Delegates to {BaseResourceList#resources} for interoperation with {ListIndex#all_resources}.
+        # @return [Enumerator::Lazy<Resync::Resource>] a lazy enumeration of the resources in this document
+        def all_resources
+          resources.lazy
+        end
+      end
     end
   end
 
@@ -28,9 +36,7 @@ module Resync
   end
 
   class ChangeList
-    # Aliases +:resources+ as +:all_resources+ for transparent
-    # interoperability with +ChangeListIndex+
-    alias_method :all_resources, :resources
+    prepend Client::Mixins::PlainList
   end
 
   class ResourceListIndex
@@ -38,8 +44,6 @@ module Resync
   end
 
   class ResourceList
-    # Aliases +:resources+ as +:all_resources+ for transparent
-    # interoperability with +ResourceListIndex+
-    alias_method :all_resources, :resources
+    prepend Client::Mixins::PlainList
   end
 end

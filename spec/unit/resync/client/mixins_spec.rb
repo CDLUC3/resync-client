@@ -44,33 +44,37 @@ module Resync
 
     describe ResourceList do
       describe '#all_resources' do
-        it 'is an alias for #resources' do
+        it 'delegates to #resources, but lazily' do
           resources = Array.new(3) do
             resource = instance_double(Resource)
             allow(resource).to receive(:client_delegate=)
             resource
           end
           list = ResourceList.new(resources: resources)
-          expect(list.all_resources).to be(list.resources)
+          all_resources = list.all_resources
+          expect(all_resources.to_a).to eq(list.resources)
+          expect(all_resources).to be_a(Enumerator::Lazy)
         end
       end
     end
 
     describe ChangeList do
-      describe '#all_changes' do
-        describe '#all_resources' do
-          it 'is an alias for #resources' do
-            resources = []
-            resources[0] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(1999, 1, 1))
-            resources[1] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 1, 1))
-            resources[2] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2001, 3, 1))
+      describe '#all_resources' do
+        it 'delegates to #resources, but lazily' do
+          resources = []
+          resources[0] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(1999, 1, 1))
+          resources[1] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 1, 1))
+          resources[2] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2001, 3, 1))
 
-            all_resources = ResourceList.new(resources: resources).all_resources
-            expect(all_resources.to_a).to eq(resources)
-          end
+          list = ChangeList.new(resources: resources)
+          all_resources = list.all_resources
+          expect(all_resources.to_a).to eq(list.resources)
+          expect(all_resources).to be_a(Enumerator::Lazy)
         end
+      end
 
-        it 'is a proxy for #changes' do
+      describe '#all_changes' do
+        it 'delegates to #changes, lazily' do
           resources = []
           resources[0] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(1999, 1, 1), metadata: Metadata.new(change: Types::Change::CREATED))
           resources[1] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 1, 1), metadata: Metadata.new(change: Types::Change::CREATED))
@@ -82,6 +86,7 @@ module Resync
           resources[7] = Resource.new(uri: 'http://example.org/', modified_time: Time.utc(2000, 9, 1), metadata: Metadata.new(change: Types::Change::DELETED))
           list = ChangeList.new(resources: resources)
           all_changes = list.all_changes(of_type: Types::Change::UPDATED, in_range: Time.utc(1999, 4, 1)..Time.utc(2000, 4, 1))
+          expect(all_changes).to be_a(Enumerator::Lazy)
           expect(all_changes.to_a).to eq([resources[3], resources[4]])
         end
       end
@@ -151,6 +156,24 @@ module Resync
             count += 1
           end
           expect(count).to eq(1)
+        end
+
+        it 'is lazy when unfiltered' do
+          change_index_uri = URI('http://example.com/dataset1/changelist.xml')
+          change_index_data = File.read('spec/data/examples/change-list-index.xml')
+          expect(@helper).to receive(:fetch).with(uri: change_index_uri).and_return(change_index_data)
+
+          list2_uri = URI('http://example.com/20130102-changelist.xml')
+          list2_data = File.read('spec/data/examples/change-list-2.xml')
+          expect(@helper).not_to receive(:fetch).with(uri: list2_uri)
+
+          list3_uri = URI('http://example.com/20130103-changelist.xml')
+          list3_data = File.read('spec/data/examples/change-list-3.xml')
+          expect(@helper).not_to receive(:fetch).with(uri: list3_uri)
+
+          change_index = @client.get_and_parse(change_index_uri)
+          all_changes = change_index.all_changes
+          expect(all_changes).to be_a(Enumerator::Lazy)
         end
       end
     end

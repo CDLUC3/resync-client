@@ -22,7 +22,7 @@ module Resync
         def all_changes(of_type: nil, in_range: nil)
           @change_lists ||= {}
           lists = in_range ? change_lists(in_range: in_range, strict: false) : resources
-          lists.flat_map do |cl|
+          lists.lazy.flat_map do |cl|
             @change_lists[cl] ||= cl.get_and_parse
             @change_lists[cl].changes(of_type: of_type, in_range: in_range)
           end
@@ -36,8 +36,13 @@ module Resync
   end
 
   class ChangeList
-    # Aliases +:changes+ as +:all_changes+ for transparent
-    # interoperability with +ChangeListIndex+
-    alias_method :all_changes, :changes
+    # Delegates to {ChangeList#changes} for interoperation with {ChangeList#all_changes}.
+    # @param of_type [Types::Change] the change type
+    # @param in_range [Range<Time>] the range of modification times
+    # @return [Enumerator::Lazy<Resource>] a lazy enumeration of the matching changes, or all
+    #   changes if neither +of_type+ nor +in_range+ is specified.
+    def all_changes(of_type: nil, in_range: nil)
+      changes(of_type: of_type, in_range: in_range).lazy
+    end
   end
 end
