@@ -1,3 +1,8 @@
+# 0.3.2
+
+- Added utility methods to `CapabilityList` to simplify downloading and parsing ResourceSync documents by capability
+- Make `ChangeList#all_changes`, and `#all_resources` on both `ResourceList` and `ChangeList`, return `Enumerator::Lazy` to improve interoperation with the corresponding methods on `ResourceIndex/ChangeIndex`
+
 # 0.3.1
 
 - Make `#get` and `#get_and_parse` in `Downloadable` (i.e., `Resource` and `Link`) cache the downloaded content

@@ -46,7 +46,6 @@ module Resync
             expect(all_resources).to be_a(Enumerator::Lazy)
           end
 
-
           it 'is lazy enough not to download anything till it \'s iterated ' do
             index_uri = URI('http://example.com/resource-list-index.xml')
             index_data = File.read('spec/data/examples/resource-list-index.xml')

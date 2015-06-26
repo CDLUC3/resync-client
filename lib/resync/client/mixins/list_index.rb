@@ -20,14 +20,6 @@ module Resync
           end
         end
       end
-
-      module PlainList
-        # Delegates to {BaseResourceList#resources} for interoperation with {ListIndex#all_resources}.
-        # @return [Enumerator::Lazy<Resync::Resource>] a lazy enumeration of the resources in this document
-        def all_resources
-          resources.lazy
-        end
-      end
     end
   end
 
@@ -35,15 +27,7 @@ module Resync
     prepend Client::Mixins::ListIndex
   end
 
-  class ChangeList
-    prepend Client::Mixins::PlainList
-  end
-
   class ResourceListIndex
     prepend Client::Mixins::ListIndex
-  end
-
-  class ResourceList
-    prepend Client::Mixins::PlainList
   end
 end

@@ -164,11 +164,9 @@ module Resync
           expect(@helper).to receive(:fetch).with(uri: change_index_uri).and_return(change_index_data)
 
           list2_uri = URI('http://example.com/20130102-changelist.xml')
-          list2_data = File.read('spec/data/examples/change-list-2.xml')
           expect(@helper).not_to receive(:fetch).with(uri: list2_uri)
 
           list3_uri = URI('http://example.com/20130103-changelist.xml')
-          list3_data = File.read('spec/data/examples/change-list-3.xml')
           expect(@helper).not_to receive(:fetch).with(uri: list3_uri)
 
           change_index = @client.get_and_parse(change_index_uri)
