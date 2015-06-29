@@ -6,10 +6,10 @@ module Resync
     describe '#zip_packages' do
       it 'transparently exposes bitstreams' do
         path = 'spec/data/resourcedump/resourcedump.xml'
-        package_uri = URI('http://example.com/resourcedump.zip')
+        package_uri = URI('http://example.com/bitstream-package.zip')
 
         client = instance_double(Client)
-        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
+        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/bitstream-package.zip')
 
         dump = XMLParser.parse(File.read(path))
         dump.client = client
@@ -83,10 +83,10 @@ module Resync
     describe '#all_zip_packages' do
       it 'is an alias for #zip_packages' do
         path = 'spec/data/resourcedump/resourcedump.xml'
-        package_uri = URI('http://example.com/resourcedump.zip')
+        package_uri = URI('http://example.com/bitstream-package.zip')
 
         client = instance_double(Client)
-        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
+        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/bitstream-package.zip')
 
         dump = XMLParser.parse(File.read(path))
         dump.client = client
@@ -110,7 +110,7 @@ module Resync
         package_uri = URI('http://example.com/changedump.zip')
 
         client = instance_double(Client)
-        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
+        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/bitstream-package.zip')
 
         dump = XMLParser.parse(File.read(path))
         dump.client = client
@@ -187,7 +187,7 @@ module Resync
         package_uri = URI('http://example.com/changedump.zip')
 
         client = instance_double(Client)
-        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/resourcedump.zip')
+        expect(client).to receive(:download_to_temp_file).once.with(package_uri).and_return('spec/data/resourcedump/bitstream-package.zip')
 
         dump = XMLParser.parse(File.read(path))
         dump.client = client

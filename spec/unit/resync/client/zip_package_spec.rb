@@ -6,7 +6,7 @@ module Resync
       describe ZipPackage do
         describe '#new' do
           it 'accepts a path to a ZIP file' do
-            path = 'spec/data/resourcedump/resourcedump.zip'
+            path = 'spec/data/resourcedump/bitstream-package.zip'
             pkg = ZipPackage.new(path)
             zipfile = pkg.zipfile
             expect(zipfile).to be_a(::Zip::File)
@@ -14,19 +14,19 @@ module Resync
           end
 
           it 'accepts a Zip::File object' do
-            zipfile = ::Zip::File.open('spec/data/resourcedump/resourcedump.zip')
+            zipfile = ::Zip::File.open('spec/data/resourcedump/bitstream-package.zip')
             pkg = ZipPackage.new(zipfile)
             expect(pkg.zipfile).to eq(zipfile)
           end
 
           it 'extracts a manifest' do
-            pkg = ZipPackage.new('spec/data/resourcedump/resourcedump.zip')
+            pkg = ZipPackage.new('spec/data/resourcedump/bitstream-package.zip')
             manifest = pkg.manifest
             expect(manifest).to be_a(Resync::ResourceDumpManifest)
           end
 
           it 'extracts entries' do
-            pkg = ZipPackage.new('spec/data/resourcedump/resourcedump.zip')
+            pkg = ZipPackage.new('spec/data/resourcedump/bitstream-package.zip')
             bitstreams = pkg.bitstreams
             expect(bitstreams.size).to eq(2)
 
@@ -42,7 +42,7 @@ module Resync
           end
 
           it 'provides direct access to bitstreams for each resource in the manifest' do
-            pkg = ZipPackage.new('spec/data/resourcedump/resourcedump.zip')
+            pkg = ZipPackage.new('spec/data/resourcedump/bitstream-package.zip')
             bitstreams = pkg.bitstreams
 
             manifest = pkg.manifest
