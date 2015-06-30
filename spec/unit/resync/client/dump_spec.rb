@@ -81,7 +81,7 @@ module Resync
     end
 
     describe '#all_zip_packages' do
-      it 'is an alias for #zip_packages' do
+      it 'delegates to #zip_packages, lazily' do
         path = 'spec/data/resourcedump/resourcedump.xml'
         package_uri = URI('http://example.com/resourcedump.zip')
 
@@ -92,10 +92,13 @@ module Resync
         dump.client = client
 
         all_zip_packages = dump.all_zip_packages
-        expect(all_zip_packages.size).to eq(1)
-        expect(all_zip_packages[0]).to be_a(Client::Zip::ZipPackage)
+        expect(all_zip_packages).to be_a(Enumerator::Lazy)
 
-        bitstreams = all_zip_packages[0].bitstreams
+        all_zip_packages_array = all_zip_packages.to_a
+        expect(all_zip_packages_array.size).to eq(1)
+        expect(all_zip_packages_array[0]).to be_a(Client::Zip::ZipPackage)
+
+        bitstreams = all_zip_packages_array[0].bitstreams
         expect(bitstreams.size).to eq(2)
         expect(bitstreams[0].content).to eq(File.read('spec/data/resourcedump/resources/res1'))
         expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))
@@ -182,7 +185,7 @@ module Resync
     end
 
     describe '#all_zip_packages' do
-      it 'is an alias for #zip_packages' do
+      it 'delegates to #zip_packages, lazily' do
         path = 'spec/data/resourcedump/changedump.xml'
         package_uri = URI('http://example.com/changedump.zip')
 
@@ -192,11 +195,14 @@ module Resync
         dump = XMLParser.parse(File.read(path))
         dump.client = client
 
-        zip_packages = dump.all_zip_packages
-        expect(zip_packages.size).to eq(1)
-        expect(zip_packages[0]).to be_a(Client::Zip::ZipPackage)
+        all_zip_packages = dump.all_zip_packages
+        expect(all_zip_packages).to be_a(Enumerator::Lazy)
 
-        bitstreams = zip_packages[0].bitstreams
+        all_zip_packages_array = all_zip_packages.to_a
+        expect(all_zip_packages_array.size).to eq(1)
+        expect(all_zip_packages_array[0]).to be_a(Client::Zip::ZipPackage)
+
+        bitstreams = all_zip_packages_array[0].bitstreams
         expect(bitstreams.size).to eq(2)
         expect(bitstreams[0].content).to eq(File.read('spec/data/resourcedump/resources/res1'))
         expect(bitstreams[1].content).to eq(File.read('spec/data/resourcedump/resources/res2'))

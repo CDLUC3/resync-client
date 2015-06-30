@@ -26,19 +26,19 @@ module Resync
           @zip_packages ||= resources.map { |r| Lazy.promise { r.zip_package } }
         end
 
-        # Aliases +:zip_packages+ as +:all_zip_packages+ for transparent
-        # interoperability between +ResourceDump+ and +ResourceDumpIndex+,
-        # +ChangeDump+ and +ChangeDumpIndex+
-        def self.prepended(ext)
-          ext.send(:alias_method, :all_zip_packages, :zip_packages)
-        end
-
       end
     end
   end
 
   class ResourceDump
     prepend Client::Mixins::Dump
+
+    # Delegates to {#zip_packages} for interoperation with {DumpIndex#all_zip_packages}.
+    # @return [Enumerator::Lazy<Resync::Resource>] a lazy enumeration of the packages for each
+    #    resource
+    def all_zip_packages
+      zip_packages.lazy
+    end
   end
 
   class ChangeDump
@@ -59,6 +59,11 @@ module Resync
       end
     end
 
-    alias_method :all_zip_packages, :zip_packages
+    # Delegates to {#zip_packages} for interoperation with {ChangeDumpIndex#all_zip_packages}.
+    # @return [Enumerator::Lazy<Resync::Resource>] a lazy enumeration of the packages for each
+    #    resource
+    def all_zip_packages(in_range: nil)
+      zip_packages(in_range: in_range).lazy
+    end
   end
 end

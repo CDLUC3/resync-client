@@ -11,7 +11,7 @@ module Resync
         # Downloads and parses each resource list and returns a flattened enumeration
         # of all zip packages in each contained list. Each contained list is only downloaded
         # as needed, and only downloaded once.
-        # @return [Enumerator::Lazy<Resync::Client::Zip::ZipPackage>] the flattened enumeration of resources
+        # @return [Enumerator::Lazy<Resync::Client::Zip::ZipPackage>] the flattened enumeration of packages
         def all_zip_packages
           resources.lazy.flat_map do |r|
             package_for(r)
@@ -43,7 +43,7 @@ module Resync
     # and +until_time+, in non-strict mode (only excluding those lists provably not in the range,
     # i.e., including packages without +from_time+ or +until_time+).
     # @param in_range [Range<Time>] the range of times to filter by
-    # @return [Enumerator::Lazy<Resync::Client::Zip::ZipPackage>] the flattened enumeration of resources
+    # @return [Enumerator::Lazy<Resync::Client::Zip::ZipPackage>] the flattened enumeration of packages
     def all_zip_packages(in_range: nil)
       if in_range
         dump_resources = change_lists(in_range: in_range, strict: false)

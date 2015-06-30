@@ -1,3 +1,7 @@
+# 0.3.3
+
+- Make `#all_zip_packages` on `ChangeDump` and `ResourceDump` return `Enumerator::Lazy` to improve interoperation with the corresponding methods on `ResourceDumpIndex/ChangeDumpIndex`
+
 # 0.3.2
 
 - Added utility methods to `CapabilityList` to simplify downloading and parsing ResourceSync documents by capability
