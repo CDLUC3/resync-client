@@ -77,8 +77,9 @@ module Resync
     describe '#all_zip_packages' do
       it 'should accept an optional time range' do
         range = Time.utc(2013, 1, 1)..Time.utc(2013, 1, 2, 6)
-        all_packages = @change_dump_index.all_zip_packages(in_range: range).to_a
-        expect(all_packages).to eq(@all_zip_packages[0, 3])
+        all_packages = @change_dump_index.all_zip_packages(in_range: range)
+        all_packages_array = all_packages.to_a
+        expect(all_packages_array).to eq(@all_zip_packages[0, 3])
       end
 
       it 'should not download unnecessary dumps or packages' do
@@ -92,6 +93,12 @@ module Resync
       it 'should not require a time range' do
         all_packages = @change_dump_index.all_zip_packages.to_a
         expect(all_packages).to eq(@all_zip_packages)
+      end
+
+      it 'returns an Enumerator::Lazy' do
+        range = Time.utc(2013, 1, 1)..Time.utc(2013, 1, 2, 6)
+        all_packages = @change_dump_index.all_zip_packages(in_range: range)
+        expect(all_packages).to be_a(Enumerator::Lazy)
       end
     end
 
