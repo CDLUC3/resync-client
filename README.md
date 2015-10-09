@@ -1,6 +1,6 @@
-# resync-client [![Build Status](https://travis-ci.org/dmolesUC3/resync-client.png?branch=master)](https://travis-ci.org/dmolesUC3/resync-client) [![Code Climate](https://codeclimate.com/github/dmolesUC3/resync-client.png)](https://codeclimate.com/github/dmolesUC3/resync-client) [![Inline docs](http://inch-ci.org/github/dmolesUC3/resync-client.png)](http://inch-ci.org/github/dmolesUC3/resync-client)
+# resync-client [![Build Status](https://travis-ci.org/CDLUC3/resync-client.png?branch=master)](https://travis-ci.org/CDLUC3/resync-client) [![Code Climate](https://codeclimate.com/github/CDLUC3/resync-client.png)](https://codeclimate.com/github/CDLUC3/resync-client) [![Inline docs](http://inch-ci.org/github/CDLUC3/resync-client.png)](http://inch-ci.org/github/CDLUC3/resync-client)
 
-A gem providing a Ruby client for the [ResourceSync](http://www.openarchives.org/rs/1.0/resourcesync) web synchronization framework, based on the [resync](https://github.com/dmolesUC3/resync) gem and [Net::HTTP](http://ruby-doc.org/stdlib-2.2.2/libdoc/net/http/rdoc/Net/HTTP.html).
+A gem providing a Ruby client for the [ResourceSync](http://www.openarchives.org/rs/1.0/resourcesync) web synchronization framework, based on the [resync](https://github.com/CDLUC3/resync) gem and [Net::HTTP](http://ruby-doc.org/stdlib-2.2.2/libdoc/net/http/rdoc/Net/HTTP.html).
 
 ## Usage
 
