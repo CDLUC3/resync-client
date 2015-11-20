@@ -1,3 +1,11 @@
+## 0.4.1
+
+- Update to depend on [resync](https://github.com/CDLUC3/resync) 0.4.1
+
+## 0.4.0
+
+- Update to depend on [resync](https://github.com/CDLUC3/resync) 0.4.0
+
 ## 0.3.5
 
 - Fix issue where `Dir.glob` could cause files to be required in an unpredictable order (h/t [nabeta](https://github.com/CDLUC3/resync/pull/1))
