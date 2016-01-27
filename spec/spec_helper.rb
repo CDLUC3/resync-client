@@ -2,11 +2,6 @@
 # SimpleCov/CodeClimate setup
 
 if ENV['COVERAGE']
-  if ENV['CODECLIMATE_REPO_TOKEN']
-    require 'codeclimate-test-reporter'
-    CodeClimate::TestReporter.start
-  end
-
   require 'simplecov'
   require 'simplecov-console'
 
