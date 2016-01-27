@@ -1,3 +1,8 @@
+## 0.4.2
+
+- Make gemspec smart enough to handle SSH checkouts
+- Update to depend on [resync](https://github.com/CDLUC3/resync) 0.4.2
+
 ## 0.4.1
 
 - Update to depend on [resync](https://github.com/CDLUC3/resync) 0.4.1

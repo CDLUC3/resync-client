@@ -14,7 +14,8 @@ Gem::Specification.new do |spec|
   spec.description = 'A Ruby client for the ResourceSync web synchronization framework'
   spec.license = 'MIT'
 
-  origin_uri = URI(`git config --get remote.origin.url`.chomp)
+  origin = `git config --get remote.origin.url`.chomp
+  origin_uri = origin.start_with?('http') ? URI(origin) : URI(origin.sub('git@github.com:', 'https://github.com/'))
   spec.homepage = URI::HTTP.build(host: origin_uri.host, path: origin_uri.path.chomp('.git')).to_s
 
   spec.files = `git ls-files -z`.split("\x0")
@@ -23,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'lazy', '~> 0.9', '>= 0.9.6'
-  spec.add_dependency 'resync', '~> 0.4', '>= 0.4.1'
+  spec.add_dependency 'resync', '~> 0.4', '>= 0.4.2'
   spec.add_dependency 'rubyzip', '~> 1.1'
 
   spec.add_development_dependency 'equivalent-xml', '~> 0.6.0'
@@ -33,5 +34,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov', '~> 0.9.2'
   spec.add_development_dependency 'simplecov-console', '~> 0.2.0'
   spec.add_development_dependency 'yard', '~> 0.8'
-  spec.add_development_dependency 'codeclimate-test-reporter', '~> 0'
 end
