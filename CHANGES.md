@@ -1,3 +1,8 @@
+## 0.4.3
+
+- Replace unmaintained [lazy](https://github.com/mental/lazy) gem with [promise](https://github.com/bhuga/promising-future),
+  eliminating ``warning: undefining `object_id' may cause serious problems`` error
+
 ## 0.4.2
 
 - Make gemspec smart enough to handle SSH checkouts

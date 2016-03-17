@@ -1,5 +1,5 @@
 require 'resync'
-require 'lazy'
+require 'promise'
 require_relative '../zip'
 require_relative 'zipped_resource'
 
@@ -21,9 +21,9 @@ module Resync
         end
 
         # The {Resync::Client::Zip::ZipPackage}s for each resource, downloaded lazily
-        # @return [Array<Lazy::Promise<Resync::Client::Zip::ZipPackage>>] the zip packages for each resource
+        # @return [Array<Promise<Resync::Client::Zip::ZipPackage>>] the zip packages for each resource
         def zip_packages
-          @zip_packages ||= resources.map { |r| Lazy.promise { r.zip_package } }
+          @zip_packages ||= resources.map { |r| promise { r.zip_package } }
         end
 
       end
@@ -49,11 +49,11 @@ module Resync
     # and +until_time+, in non-strict mode (only excluding those lists provably not in the range,
     # i.e., including packages without +from_time+ or +until_time+).
     # @param in_range [Range<Time>] the range of times to filter by
-    # @return [Array<Lazy::Promise<Resync::Client::Zip::ZipPackage>>] the zip packages for each resource
+    # @return [Array<Promise<Resync::Client::Zip::ZipPackage>>] the zip packages for each resource
     def zip_packages(in_range: nil)
       if in_range
         change_lists = change_lists(in_range: in_range, strict: false)
-        change_lists.map { |r| Lazy.promise { r.zip_package } }
+        change_lists.map { |r| promise { r.zip_package } }
       else
         super()
       end
