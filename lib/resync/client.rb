@@ -1,5 +1,5 @@
 require 'resync'
-require_relative 'client/mixins'
+require 'resync/client/mixins'
 
 Dir.glob(File.expand_path('../client/*.rb', __FILE__)).sort.each(&method(:require))
 

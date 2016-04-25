@@ -1,3 +1,8 @@
+## 0.4.4
+
+- Replace all `require_relative` with absolute `require` to avoid symlink issues
+- Update [resync](https://github.com/CDLUC3/resync) 0.4.3 (which does the same thing)
+
 ## 0.4.3
 
 - Replace unmaintained [lazy](https://github.com/mental/lazy) gem with [promise](https://github.com/bhuga/promising-future),

@@ -1,4 +1,4 @@
-require_relative '../../client'
+require 'resync/client'
 
 module Resync
   class Client

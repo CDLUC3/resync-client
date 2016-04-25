@@ -1,5 +1,5 @@
-require_relative '../zip'
-require_relative 'downloadable'
+require 'resync/client/zip'
+require 'resync/client/mixins/downloadable'
 
 module Resync
   class Client

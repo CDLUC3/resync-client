@@ -1,4 +1,4 @@
-require_relative '../zip'
+require 'resync/client/zip'
 
 module Resync
   class Client

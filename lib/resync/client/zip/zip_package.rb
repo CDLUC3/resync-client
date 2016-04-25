@@ -1,7 +1,7 @@
 require 'zip'
 require 'resync'
-require_relative '../mixins'
-require_relative 'bitstream'
+require 'resync/client/mixins'
+require 'resync/client/zip/bitstream'
 
 module Resync
   class Client

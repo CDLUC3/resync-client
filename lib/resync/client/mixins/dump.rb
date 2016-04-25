@@ -1,7 +1,7 @@
 require 'resync'
 require 'promise'
-require_relative '../zip'
-require_relative 'zipped_resource'
+require 'resync/client/zip'
+require 'resync/client/mixins/zipped_resource'
 
 module Resync
   class Client

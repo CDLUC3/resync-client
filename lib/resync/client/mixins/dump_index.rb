@@ -1,5 +1,5 @@
 require 'resync'
-require_relative 'resource_client_delegate'
+require 'resync/client/mixins/resource_client_delegate'
 
 module Resync
   class Client
