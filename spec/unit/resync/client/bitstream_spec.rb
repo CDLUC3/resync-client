@@ -31,11 +31,11 @@ module Resync
 
         describe '#new' do
           it 'requires a zipfile' do
-            expect { Bitstream.new(resource: @resource) }.to raise_error
+            expect { Bitstream.new(resource: @resource) }.to raise_error(ArgumentError)
           end
 
           it 'requires a resource' do
-            expect { Bitstream.new(zipfile: @zipfile) }.to raise_error
+            expect { Bitstream.new(zipfile: @zipfile) }.to raise_error(ArgumentError)
           end
         end
 

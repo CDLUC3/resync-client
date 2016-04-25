@@ -91,7 +91,9 @@ module Resync
           @redirect = Net::HTTPMovedPermanently.allocate
           allow(@redirect).to receive(:[]).with('location').and_return(uri.to_s)
           expect(@http).to receive(:request).with(request_for(uri: uri, headers: { 'User-Agent' => user_agent })).exactly(HTTPHelper::DEFAULT_MAX_REDIRECTS).times.and_yield(@redirect)
-          expect { helper.fetch(uri: uri) }.to raise_error
+          expect { helper.fetch(uri: uri) }.to raise_error do |e|
+            expect(e.message).to match(/Redirect limit.*exceeded.*#{uri.to_s}/)
+          end
         end
 
         it 'fails on a 4xx' do
@@ -100,7 +102,9 @@ module Resync
           allow(@error).to receive(:message).and_return('Forbidden')
           expect(@http).to receive(:request).and_yield(@error)
           uri = URI('http://example.org/')
-          expect { helper.fetch(uri: uri) }.to raise_error
+          expect { helper.fetch(uri: uri) }.to raise_error do |e|
+            expect(e.message).to match(/403.*Forbidden.*#{uri.to_s}/)
+          end
         end
 
         it 'fails on a 5xx' do
@@ -109,7 +113,9 @@ module Resync
           allow(@error).to receive(:message).and_return('Internal Server Error')
           expect(@http).to receive(:request).and_yield(@error)
           uri = URI('http://example.org/')
-          expect { helper.fetch(uri: uri) }.to raise_error
+          expect { helper.fetch(uri: uri) }.to raise_error do |e|
+            expect(e.message).to match(/500.*Internal Server Error.*#{uri.to_s}/)
+          end
         end
       end
 
@@ -197,7 +203,9 @@ module Resync
           @redirect = Net::HTTPMovedPermanently.allocate
           allow(@redirect).to receive(:[]).with('location').and_return(uri.to_s)
           expect(@http).to receive(:request).with(request_for(uri: uri, headers: { 'User-Agent' => user_agent })).exactly(HTTPHelper::DEFAULT_MAX_REDIRECTS).times.and_yield(@redirect)
-          expect { @path = helper.fetch_to_file(uri: uri) }.to raise_error
+          expect { @path = helper.fetch_to_file(uri: uri) }.to raise_error do |e|
+            expect(e.message).to match(/Redirect limit.*exceeded.*#{uri.to_s}/)
+          end
           expect(@path).to be_nil
         end
 
@@ -207,7 +215,9 @@ module Resync
           allow(@error).to receive(:message).and_return('Forbidden')
           expect(@http).to receive(:request).and_yield(@error)
           uri = URI('http://example.org/')
-          expect { @path = helper.fetch_to_file(uri: uri) }.to raise_error
+          expect { @path = helper.fetch_to_file(uri: uri) }.to raise_error do |e|
+            expect(e.message).to match(/403.*Forbidden.*#{uri.to_s}/)
+          end
           expect(@path).to be_nil
         end
 
@@ -217,7 +227,9 @@ module Resync
           allow(@error).to receive(:message).and_return('Internal Server Error')
           expect(@http).to receive(:request).and_yield(@error)
           uri = URI('http://example.org/')
-          expect { helper.fetch_to_file(uri: uri) }.to raise_error
+          expect { helper.fetch_to_file(uri: uri) }.to raise_error do |e|
+            expect(e.message).to match(/500.*Internal Server Error.*#{uri.to_s}/)
+          end
         end
 
         it 'accepts a file path argument' do
