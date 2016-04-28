@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'promise', '~> 0.3', '>= 0.3.1'
-  spec.add_dependency 'resync', '~> 0.4', '>= 0.4.3'
+  spec.add_dependency 'resync', '~> 0.4', '>= 0.4.4'
   spec.add_dependency 'rubyzip', '~> 1.1'
 
   spec.add_development_dependency 'equivalent-xml', '~> 0.6.0'
