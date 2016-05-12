@@ -1,3 +1,7 @@
+## 0.4.6 (next)
+
+- Make gemspec homepage determination more robust against git repository host aliases
+
 ## 0.4.5
 
 - Update to [resync](https://github.com/CDLUC3/resync) 0.4.4
