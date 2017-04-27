@@ -19,14 +19,14 @@ module Resync
         # Delegates to {Client#get} to get the contents of this +:uri+.
         # The downloaded content will only be downloaded once; subsequent
         # calls to this method will return the cached content.
-        def get # rubocop:disable Style/AccessorMethodName
+        def get
           @content ||= client.get(uri)
         end
 
         # Delegates to {Client#download_to_temp_file} to download the
         # contents of +:uri+ to a file. Subsequent calls will download
         # the contents again, each time to a fresh temporary file.
-        def download_to_temp_file # rubocop:disable Style/AccessorMethodName
+        def download_to_temp_file
           client.download_to_temp_file(uri)
         end
 

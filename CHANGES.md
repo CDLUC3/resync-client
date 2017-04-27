@@ -1,6 +1,9 @@
-## 0.4.6 (next)
+## 0.4.6
 
-- Make gemspec homepage determination more robust against git repository host aliases
+- Update to [resync](https://github.com/CDLUC3/resync) 0.4.5
+- Update to Ruby 2.2.5
+- Update to RuboCop 0.47
+- Allow Rake versions > 10.x
 
 ## 0.4.5
 

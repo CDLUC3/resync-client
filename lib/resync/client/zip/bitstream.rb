@@ -63,19 +63,19 @@ module Resync
         private
 
         def resource=(value)
-          fail ArgumentError, 'nil is not a resource' unless value
+          raise ArgumentError, 'nil is not a resource' unless value
           self.metadata = value.metadata
           @resource = value
         end
 
         def metadata=(value)
-          fail 'no metadata found' unless value
+          raise 'no metadata found' unless value
           self.path = value.path
           @metadata = value
         end
 
         def path=(value)
-          fail 'no path found in metadata' unless value
+          raise 'no path found in metadata' unless value
           @path = value.start_with?('/') ? value.slice(1..-1) : value
         end
 

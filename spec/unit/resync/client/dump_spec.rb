@@ -55,7 +55,7 @@ module Resync
         expect(lazy_flat_mapped).to eq(all_packages)
       end
 
-      it 'supports lazy iteration 'do
+      it 'supports lazy iteration ' do
         manifests = Array.new(3) { instance_double(ChangeDumpManifest) }
         all_packages = Array.new(3) do |index|
           zip_package = instance_double(Client::Zip::ZipPackage)
@@ -159,7 +159,7 @@ module Resync
         expect(flat_mapped).to eq(all_packages)
       end
 
-      it 'supports lazy iteration 'do
+      it 'supports lazy iteration ' do
         manifests = Array.new(3) { instance_double(ChangeDumpManifest) }
         all_packages = Array.new(3) do |index|
           zip_package = instance_double(Client::Zip::ZipPackage)

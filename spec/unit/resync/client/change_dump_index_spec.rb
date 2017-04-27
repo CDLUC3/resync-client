@@ -18,7 +18,8 @@ module Resync
                                                                <loc>http://example.com/20130103-changedump.xml</loc>
                                                                <rs:md from='2013-01-03T00:00:00Z' until='2013-01-04T00:00:00Z'/>
                                                              </sitemap>
-                                                           </sitemapindex>"))
+                                                           </sitemapindex>"
+      ))
 
       @change_dumps = [
         "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9' xmlns:rs='http://www.openarchives.org/rs/terms/'>

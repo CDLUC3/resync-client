@@ -8,18 +8,18 @@ namespace :spec do
 
   desc 'Run all unit tests'
   RSpec::Core::RakeTask.new(:unit) do |task|
-    task.rspec_opts = %w(--color --format documentation --order default)
+    task.rspec_opts = %w[--color --format documentation --order default]
     task.pattern = 'unit/**/*_spec.rb'
   end
 
   desc 'Run all acceptance tests'
   RSpec::Core::RakeTask.new(:acceptance) do |task|
     ENV['COVERAGE'] = nil
-    task.rspec_opts = %w(--color --format documentation --order default)
+    task.rspec_opts = %w[--color --format documentation --order default]
     task.pattern = 'acceptance/**/*_spec.rb'
   end
 
-  task all: [:unit, :acceptance]
+  task all: %i[unit acceptance]
 end
 
 desc 'Run all tests'
@@ -45,7 +45,7 @@ RuboCop::RakeTask.new
 
 desc 'List TODOs (from spec/todo.rb)'
 RSpec::Core::RakeTask.new(:todo) do |task|
-  task.rspec_opts = %w(--color --format documentation --order default)
+  task.rspec_opts = %w[--color --format documentation --order default]
   task.pattern = 'todo.rb'
 end
 
