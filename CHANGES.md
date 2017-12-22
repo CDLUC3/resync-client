@@ -1,3 +1,10 @@
+## 0.4.7 (22 December 2017)
+
+- Update to [resync](https://github.com/CDLUC3/resync) 0.4.6
+- Update to Ruby 2.4.1
+- Update to RuboCop 0.52
+- Update to Yard 0.9.12
+
 ## 0.4.6
 
 - Update to [resync](https://github.com/CDLUC3/resync) 0.4.5
